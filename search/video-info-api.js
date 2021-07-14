@@ -5,7 +5,12 @@ const {google} = require('googleapis');
 module.exports = async (videoList) => {
     console.log('video info api start');
     // loop through list of videos to do a batch call to videos api
-
-    //figure out which ones are live/upcoming
-    return 'video info';
+    
+    let promise = google.youtube('v3').videos.list({
+        key: process.env.YOUTUBE_TOKEN,
+        part: 'liveStreamingDetails',
+        id: videoList.join()
+    })
+    
+    return promise;
 };
