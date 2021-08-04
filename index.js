@@ -6,7 +6,7 @@ const main = async() => {
     let videoList = await videoListApi();
 
     let videoInfo = await videoInfoApi(videoList);
-    console.log("videoInfo", videoInfo)
+    console.log("videoInfo", videoInfo.data.items)
     //do a batch request for each videoId and determine if it is live/upcoming or not
 
 }
