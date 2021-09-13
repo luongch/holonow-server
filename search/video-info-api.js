@@ -3,7 +3,6 @@ const parseString = require('xml2js').parseString;
 const {google} = require('googleapis');
 
 module.exports = async (videoList) => {
-    console.log('video info api start');
     // loop through list of videos to do a batch call to videos api
     let videoIdList = [];
     videoList.forEach(video => {
