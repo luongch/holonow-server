@@ -4,18 +4,21 @@ const axios = require('axios');
 const parseString = require('xml2js').parseString;
 const {google} = require('googleapis');
 
-const parseVideoId = (videoNameMetaData) =>{
-  console.log("parseVideoId start");
-  let videoId = null;
-  parseString(videoNameMetaData, function (err, result) {
-      let videoName = result.feed.entry[0].id[0].split(':')
-      videoId = videoName[videoName.length-1];        
+const parseVideoData = (videoData) =>{
+  let video = {};
+  parseString(videoData, function (err, result) {
+    video = {
+      id: result.feed.entry[0]['yt:videoId'][0],
+      channelId: result.feed.entry[0]['yt:channelId'][0],
+      title: result.feed.entry[0].title[0],
+      author: result.feed.entry[0].author[0].name[0],
+      dateFetched : new Date().toISOString()                         
+    };
   })
-  return videoId;    
+  return video;
 }
 
 module.exports = async() => {
-  console.log("video list api start");
   const xmlFetches = channels.map((channel) => (
     axios.get('https://www.youtube.com/feeds/videos.xml', {
       params: {
@@ -24,14 +27,14 @@ module.exports = async() => {
       },
     })
     .then((xmlResult) => {
-        return parseVideoId(xmlResult.data);
+        return parseVideoData(xmlResult.data);
     })
     .catch((error)=>{
         console.log(error)
     })
   ));
-      
+  
   let videoList = (await Promise.all(xmlFetches)).flat();
-  console.log("video list api end");
+
   return videoList;
 };
