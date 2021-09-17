@@ -5,6 +5,7 @@ const videoInfoApi = require('./search/video-info-api')
 const videoModel = require('./models/video')
 const DbHelper = require('./helpers/dbHelper')
 const dbHelper = new DbHelper();
+const moment = require('moment')
 
 const main = async() => {
     app.get('/', (req,res)=>{
@@ -39,11 +40,28 @@ const main = async() => {
             dbHelper.upsert(video)
         });
     }
+    // writeToDb(streamingVideoList);
     
-    writeToDb(streamingVideoList)
-    dbHelper.getLiveStreams()
+    // dbHelper.getLiveStreams()
+    // dbHelper.getAllVideos()
+    
+    let dateFetched = await dbHelper.getLastDateFetched();
+    let liveStreams = null;
+
+    if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 5 ) {
+        console.log("outdated")
+        writeToDb(streamingVideoList);
+        liveStreams = await dbHelper.getLiveStreams()
+    }
+    else {
+        console.log("fresh")
+        liveStreams = await dbHelper.getLiveStreams()
+    }
+    console.log("livestreams", liveStreams)
+    
 
     //make method to check when the last update was
+
     //make it so it will only writeToDb when the last update was 5 minutes ago
 }
 

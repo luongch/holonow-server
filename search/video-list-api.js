@@ -3,6 +3,7 @@ const channels = require('../channel_ids.json');
 const axios = require('axios');
 const parseString = require('xml2js').parseString;
 const {google} = require('googleapis');
+const moment = require('moment')
 
 const parseVideoData = (videoData) =>{
   let video = {};
@@ -12,7 +13,7 @@ const parseVideoData = (videoData) =>{
       channelId: result.feed.entry[0]['yt:channelId'][0],
       title: result.feed.entry[0].title[0],
       author: result.feed.entry[0].author[0].name[0],
-      dateFetched : new Date().toISOString()                         
+      dateFetched : moment()                         
     };
   })
   return video;
@@ -23,7 +24,7 @@ module.exports = async() => {
     axios.get('https://www.youtube.com/feeds/videos.xml', {
       params: {
         channel_id: channel.id,
-        t: Date.now(),
+        t: moment(),
       },
     })
     .then((xmlResult) => {

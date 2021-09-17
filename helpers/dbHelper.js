@@ -17,7 +17,7 @@ const videoSchema = new mongoose.Schema({
 const Video = mongoose.model('Video', videoSchema)
 
 const extractVideoData = (videoData) => {
-    return video = new Video({
+    let video = new Video({
         id: videoData.id,
         channelId: videoData.channelId,
         title: videoData.title,
@@ -27,9 +27,11 @@ const extractVideoData = (videoData) => {
         actualStartTime: videoData.actualStartTime ? videoData.actualStartTime : null,
         concurrentViewers: videoData.concurrentViewers ? videoData.concurrentViewers : null,
         activeLiveChatId: videoData.activeLiveChatId ? videoData.activeLiveChatId : null
-    }).toObject(); //this toObject was needed in order for it to remove _id so findOneAndUpdate works,
+    }).toObject();  //this toObject was needed in order for me to remove _id so findOneAndUpdate works,
     // otherwise it will try to update everything including _id which is immutable
     //https://stackoverflow.com/a/63265811
+    delete video._id;
+    return video;
 } 
     
 module.exports = class DbHelper {
@@ -41,35 +43,31 @@ module.exports = class DbHelper {
         let video = extractVideoData(videoData)
         let query = {'channelId': video.channelId};
 
-        Video.findOneAndUpdate(query, video, {upsert: true}, function (err, vid) {
+        Video.findOneAndUpdate(query, video, {upsert: true,new: true}, function (err, vid) {
             if (err) return console.error("error from upsert", err);
         });
     }
     getLiveStreams() {
         let query = {'concurrentViewers': {$ne:null}}; 
-        Video.find(query ,function (err, videos) {
+        return Video.find(query ,function (err, videos) {
             if (err) return console.error(err);
-            console.log(videos);
         })
     }
     getAllVideos() {
-        Video.find(function (err, videos) {
+        return Video.find(function (err, videos) {
             if (err) return console.error(err);
-            console.log(videos);
         })
     }
-    getScheduledLiveStreams() {
+    getUpcomingLiveStreams() {
         let query = {}; //set the query
         Video.find(query, function (err, videos) {
             if (err) return console.error(err);
             console.log(videos);
         })
     }
-    getVideo() {
-        let query = {'channelId':{}}; //set the query
-        Video.find(query, function (err, videos) {
-            if (err) return console.error(err);
-            console.log(videos);
+    getLastDateFetched() {
+        return Video.findOne({},'dateFetched', { sort: { 'dateFetched': -1 } }, function (err, result) {
+            if (err) return console.error("could not date fetched data");            
         })
     }
 }
