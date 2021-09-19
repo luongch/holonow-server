@@ -26,9 +26,8 @@ const main = async() => {
     let streamingVideoList = [];
     //loop through all the videosInfo and combine it into a new object
     for(i = 0; i<videoList.length; i++) {
-        //check if it is a video is live or scheduled to be live in the future
         let liveStreamingDetails = videosInfo.data.items[i].liveStreamingDetails
-        if (liveStreamingDetails && liveStreamingDetails.scheduledStartTime && !liveStreamingDetails.actualEndTime) {
+        if (liveStreamingDetails) {
             streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails})
         }
     }
@@ -40,29 +39,21 @@ const main = async() => {
             dbHelper.upsert(video)
         });
     }
-    // writeToDb(streamingVideoList);
-    
-    // dbHelper.getLiveStreams()
-    // dbHelper.getAllVideos()
     
     let dateFetched = await dbHelper.getLastDateFetched();
     let liveStreams = null;
 
     if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 5 ) {
-        console.log("outdated")
+        console.log("outdated, fetching new data")
         writeToDb(streamingVideoList);
         liveStreams = await dbHelper.getLiveStreams()
     }
     else {
-        console.log("fresh")
+        console.log("fresh, no need to data update")
         liveStreams = await dbHelper.getLiveStreams()
     }
     console.log("livestreams", liveStreams)
     
-
-    //make method to check when the last update was
-
-    //make it so it will only writeToDb when the last update was 5 minutes ago
 }
 
 main();
