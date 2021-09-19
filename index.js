@@ -43,7 +43,7 @@ const main = async() => {
     let dateFetched = await dbHelper.getLastDateFetched();
     let liveStreams = null;
 
-    if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 5 ) {
+    if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 1 ) {
         console.log("outdated, fetching new data")
         writeToDb(streamingVideoList);
         liveStreams = await dbHelper.getLiveStreams()
