@@ -5,6 +5,7 @@ const videoInfoApi = require('./search/video-info-api')
 const videoModel = require('./models/video')
 const DbHelper = require('./helpers/dbHelper')
 const dbHelper = new DbHelper();
+const moment = require('moment')
 
 const main = async() => {
     app.get('/', (req,res)=>{
@@ -25,9 +26,8 @@ const main = async() => {
     let streamingVideoList = [];
     //loop through all the videosInfo and combine it into a new object
     for(i = 0; i<videoList.length; i++) {
-        //check if it is a video is live or scheduled to be live in the future
         let liveStreamingDetails = videosInfo.data.items[i].liveStreamingDetails
-        if (liveStreamingDetails && liveStreamingDetails.scheduledStartTime && !liveStreamingDetails.actualEndTime) {
+        if (liveStreamingDetails) {
             streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails})
         }
     }
@@ -40,11 +40,20 @@ const main = async() => {
         });
     }
     
-    writeToDb(streamingVideoList)
-    dbHelper.getLiveStreams()
+    let dateFetched = await dbHelper.getLastDateFetched();
+    let liveStreams = null;
 
-    //make method to check when the last update was
-    //make it so it will only writeToDb when the last update was 5 minutes ago
+    if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 1 ) {
+        console.log("outdated, fetching new data")
+        writeToDb(streamingVideoList);
+        liveStreams = await dbHelper.getLiveStreams()
+    }
+    else {
+        console.log("fresh, no need to data update")
+        liveStreams = await dbHelper.getLiveStreams()
+    }
+    console.log("livestreams", liveStreams)
+    
 }
 
 main();
