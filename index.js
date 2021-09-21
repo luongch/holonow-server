@@ -11,11 +11,11 @@ const main = async() => {
     app.get('/', (req,res)=>{
         res.send('we are on home')
     });
-    app.get('/videoList', (req,res)=>{
-        res.send(videoList)
+    app.get('/live', (req,res)=>{
+        res.send(liveStreams)
     });
-    app.get('/videoInfo', (req,res)=>{
-        res.send(videoInfo.data.items)
+    app.get('/upcoming', (req,res)=>{
+        res.send(upcoming)
     });
     app.listen(3000)
 
@@ -52,8 +52,10 @@ const main = async() => {
         console.log("fresh, no need to data update")
         liveStreams = await dbHelper.getLiveStreams()
     }
-    console.log("livestreams", liveStreams)
-    
+    // console.log("livestreams", liveStreams)
+
+    let upcoming = await dbHelper.getUpcomingLiveStreams();
+    // console.log(upcoming);
 }
 
 main();

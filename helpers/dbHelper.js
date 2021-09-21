@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const DbConnectionHelper = require('./dbConnectionHelper.js');
 const dbConnectionHelper = new DbConnectionHelper();
+const moment = require('moment')
 
 const videoSchema = new mongoose.Schema({
     id: String,
@@ -59,10 +60,10 @@ module.exports = class DbHelper {
         })
     }
     getUpcomingLiveStreams() {
-        let query = {}; //set the query
-        Video.find(query, function (err, videos) {
+        let currentDate = new Date().toISOString();
+        let query = {'scheduledStartTime':{'$gt': currentDate}}
+        return Video.find(query, function (err, videos) {
             if (err) return console.error(err);
-            console.log(videos);
         })
     }
     getLastDateFetched() {
