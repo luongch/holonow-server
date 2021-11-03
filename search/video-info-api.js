@@ -1,5 +1,4 @@
 const axios = require('axios');
-const parseString = require('xml2js').parseString;
 const {google} = require('googleapis');
 
 module.exports = async (videoList) => {

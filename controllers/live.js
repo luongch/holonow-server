@@ -30,19 +30,15 @@ const refreshLiveStreams = async (req, res) => {
     }
     
     let dateFetched = await dbHelper.getLastDateFetched();
-    // let liveStreams = null;
 
     if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 1 ) {
-        // console.log("outdated, fetching new data")
         writeToDb(streamingVideoList);
-        // liveStreams = await dbHelper.getLiveStreams()
-        res.status(200).send('outdated, fetching new data')
+        res.status(200).send({success:true,  message:'outdated, fetching new data'})
     }
     else {
-        // console.log("fresh, no need to data update")
-        // liveStreams = await dbHelper.getLiveStreams()
-        res.status(200).send('fresh, no need to data update')
+        res.status(200).send({success:true, message:'fresh, no need to data update'})
     }        
+    res.status(400).send({success:false, message:"failed to refresh data"})
 }
 
 module.exports = {
