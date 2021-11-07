@@ -1,20 +1,7 @@
 const mongoose = require('mongoose')
 const DbConnectionHelper = require('./dbConnectionHelper.js');
 const dbConnectionHelper = new DbConnectionHelper();
-
-const videoSchema = new mongoose.Schema({
-    id: String,
-    channelId: String,
-    title: String,
-    author: String,
-    dateFetched: Date,
-    scheduledStartTime: Date,
-    actualStartTime: Date,
-    concurrentViewers: Number,
-    activeLiveChatId: String
-})
-
-const Video = mongoose.model('Video', videoSchema)
+const Video = require('../models/video')
 
 const extractVideoData = (videoData) => {
     let video = new Video({

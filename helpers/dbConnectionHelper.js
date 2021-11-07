@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-var uri = 'mongodb+srv://holonow_admin:a123456@sandbox.qxqec.mongodb.net/holonow?retryWrites=true&w=majority'
+var uri = process.env.MONGO_URI
 
 module.exports = class dbConnectionHelper {
     constructor() {

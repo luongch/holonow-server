@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const {
     getLiveStreams,
-    refreshLiveStreams
+    // refreshLiveStreams
 } = require('../controllers/live')
 
-router.get('/live', getLiveStreams)
-router.get('/', refreshLiveStreams)
+router.get('/', getLiveStreams)
+// router.get('/', refreshLiveStreams)
 
 module.exports = router;

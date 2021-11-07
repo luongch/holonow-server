@@ -5,11 +5,12 @@ const dbHelper = new DbHelper();
 const moment = require('moment')
 
 const getLiveStreams = async (req,res)=>{
+    await refreshLiveStreams();
     liveStreams = await dbHelper.getLiveStreams()
     res.status(200).json({success: true, data:liveStreams})
 }
 
-const refreshLiveStreams = async (req, res) => {
+const refreshLiveStreams = async () => {
     // get all the videos latest videos for each channel
     let videoList = await videoListApi();
     let videosInfo = await videoInfoApi(videoList);
@@ -33,15 +34,16 @@ const refreshLiveStreams = async (req, res) => {
 
     if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 1 ) {
         writeToDb(streamingVideoList);
-        res.status(200).send({success:true,  message:'outdated, fetching new data'})
+        console.log("outdated")
+        // res.status(200).send({success:true, message:'outdated, fetching new data'})
     }
     else {
-        res.status(200).send({success:true, message:'fresh, no need to data update'})
+        console.log("fresh")
+        // res.status(200).send({success:true, message:'fresh, no need to data update'})
     }        
-    res.status(400).send({success:false, message:"failed to refresh data"})
+    // res.status(400).send({success:false, message:"failed to refresh data"})
 }
 
 module.exports = {
-    getLiveStreams,
-    refreshLiveStreams
+    getLiveStreams
 }
