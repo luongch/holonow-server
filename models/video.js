@@ -13,12 +13,12 @@ const videoSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        required:[true, 'must video title'],
+        required:[true, 'must provide video title'],
         trim:true
     },
     author: {
         type: String,
-        required:[true, 'must video author'],
+        required:[true, 'must provide video author'],
         trim:true
     },
     dateFetched: {
@@ -38,12 +38,12 @@ const videoSchema = new mongoose.Schema({
     },
     concurrentViewers: {
         type: Number,
-        required:[true, 'must concurrent viewers'],
+        required:[true, 'must provide concurrent viewers'],
         trim:true
     },
     activeLiveChatId: {
         type: String,
-        required:[true, 'must active live chat id'],
+        required:[true, 'must provide active live chat id'],
         trim:true
     },
 })
