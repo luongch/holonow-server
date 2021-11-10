@@ -5,9 +5,24 @@ const dbHelper = new DbHelper();
 const moment = require('moment')
 
 const getLiveStreams = async (req,res)=>{
-    await refreshLiveStreams();
-    liveStreams = await dbHelper.getLiveStreams()
-    res.status(200).json({success: true, data:liveStreams})
+    try {
+        await refreshLiveStreams();
+    }
+    catch(error){
+        res.status(500).json({success: false, msg: error})
+    }
+    try {        
+        let liveStreams = await dbHelper.getLiveStreams()
+        res.status(200).json({success: true, data: liveStreams})
+    }
+    catch (error) {
+        res.status(500).json({success: false, msg: error})
+    }    
+}
+
+const getAllVideos = async (req, res) => {
+    let videos = await dbHelper.getAllVideos()
+    res.status(200).json({success: true, data: videos})
 }
 
 const refreshLiveStreams = async () => {
@@ -31,7 +46,7 @@ const refreshLiveStreams = async () => {
     }
     
     let dateFetched = await dbHelper.getLastDateFetched();
-
+    
     if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 1 ) {
         writeToDb(streamingVideoList);
         console.log("outdated")
@@ -45,5 +60,6 @@ const refreshLiveStreams = async () => {
 }
 
 module.exports = {
-    getLiveStreams
+    getLiveStreams,
+    // getAllVideos
 }

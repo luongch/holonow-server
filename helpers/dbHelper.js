@@ -1,6 +1,3 @@
-const mongoose = require('mongoose')
-const DbConnectionHelper = require('./dbConnectionHelper.js');
-const dbConnectionHelper = new DbConnectionHelper();
 const Video = require('../models/video')
 
 const extractVideoData = (videoData) => {
@@ -41,7 +38,8 @@ module.exports = class DbHelper {
         })
     }
     getAllVideos() {
-        return Video.find(function (err, videos) {
+        let query = {};
+        return Video.find(query, function (err, videos) {
             if (err) return console.error(err);
         })
     }
