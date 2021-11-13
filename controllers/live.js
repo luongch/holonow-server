@@ -1,5 +1,5 @@
-const videoListApi = require('../search/video-list-api')
-const videoInfoApi = require('../search/video-info-api')
+const getVideoList = require('../search/video-list-api')
+const getVideoInfo = require('../search/video-info-api')
 const DbHelper = require('../helpers/dbHelper')
 const dbHelper = new DbHelper();
 const moment = require('moment')
@@ -9,7 +9,7 @@ const getLiveStreams = async (req,res)=>{
         await refreshLiveStreams();
     }
     catch(error){
-        res.status(500).json({success: false, msg: error})
+        res.status(500).json({success: false, msg: "failed to refresh streams"})
     }
     try {        
         let liveStreams = await dbHelper.getLiveStreams()
@@ -27,8 +27,9 @@ const getAllVideos = async (req, res) => {
 
 const refreshLiveStreams = async () => {
     // get all the videos latest videos for each channel
-    let videoList = await videoListApi();
-    let videosInfo = await videoInfoApi(videoList);
+    console.log("starting refresh")
+    let videoList = await getVideoList();
+    let videosInfo = await getVideoInfo(videoList);
 
     let streamingVideoList = [];
     //loop through all the videosInfo and combine it into a new object

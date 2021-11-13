@@ -18,7 +18,7 @@ const parseVideoData = (videoData) =>{
   return video;
 }
 
-module.exports = async() => {
+const getVideoList = async() => {
   const xmlFetches = channels.map((channel) => (
     axios.get('https://www.youtube.com/feeds/videos.xml', {
       params: {
@@ -38,3 +38,5 @@ module.exports = async() => {
 
   return videoList;
 };
+
+module.exports = getVideoList //why can I not wrap this in curly brackets?

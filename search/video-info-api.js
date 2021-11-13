@@ -1,7 +1,7 @@
 const axios = require('axios');
 const {google} = require('googleapis');
 
-module.exports = async (videoList) => {
+const getVideoInfo = async (videoList) => {
     // loop through list of videos to do a batch call to videos api
     let videoIdList = [];
     videoList.forEach(video => {
@@ -16,3 +16,5 @@ module.exports = async (videoList) => {
     
     return promise;
 };
+
+module.exports = getVideoInfo
