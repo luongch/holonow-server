@@ -11,8 +11,7 @@ const parseVideoData = (videoData) =>{
       id: result.feed.entry[0]['yt:videoId'][0],
       channelId: result.feed.entry[0]['yt:channelId'][0],
       title: result.feed.entry[0].title[0],
-      author: result.feed.entry[0].author[0].name[0],
-      dateFetched : moment()
+      author: result.feed.entry[0].author[0].name[0]
     };
   })
   return video;
