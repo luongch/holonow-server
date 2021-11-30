@@ -38,6 +38,7 @@ module.exports = class DbHelper {
         })
     }
     getAllVideos() {
+        // add query to filter out live streams and only display last uploaded video
         let query = {};
         return Video.find(query, function (err, videos) {
             if (err) return console.error(err);

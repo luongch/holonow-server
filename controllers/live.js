@@ -62,5 +62,5 @@ const refreshLiveStreams = async () => {
 
 module.exports = {
     getLiveStreams,
-    // getAllVideos
+    getAllVideos
 }
