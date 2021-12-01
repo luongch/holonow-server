@@ -4,6 +4,11 @@ const DbHelper = require('../helpers/dbHelper')
 const dbHelper = new DbHelper();
 const moment = require('moment')
 
+/**
+ * Refreshes all live stream data and then returns all live streams
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getLiveStreams = async (req,res)=>{
     try {
         await refreshLiveStreams();
@@ -20,11 +25,28 @@ const getLiveStreams = async (req,res)=>{
     }    
 }
 
+/**
+ * Returns all of the latest non live videos
+ */
 const getAllVideos = async (req, res) => {
     let videos = await dbHelper.getAllVideos()
     res.status(200).json({success: true, data: videos})
 }
 
+/**
+ * Update the db with the latest live streaming info for each video
+ * @param {*} streamingVideoList 
+ */
+const writeToDb = (streamingVideoList) => {
+    streamingVideoList.forEach(video => {
+        dbHelper.upsert(video)
+    });
+}
+
+
+/**
+ * If data is outdated update all livestream data in db
+ */
 const refreshLiveStreams = async () => {
     // get all the videos latest videos for each channel
     console.log("starting refresh")
@@ -37,12 +59,6 @@ const refreshLiveStreams = async () => {
         if (liveStreamingDetails) {
             streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails})
         }
-    }
-
-    const writeToDb = (streamingVideoList) => {
-        streamingVideoList.forEach(video => {
-            dbHelper.upsert(video)
-        });
     }
     
     let dateFetched = await dbHelper.getLastDateFetched();
