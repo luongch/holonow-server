@@ -11,7 +11,7 @@ const getLiveStreams = async (req,res)=>{
     catch(error){
         res.status(500).json({success: false, msg: "failed to refresh streams"})
     }
-    try {        
+    try {
         let liveStreams = await dbHelper.getLiveStreams()
         res.status(200).json({success: true, data: liveStreams})
     }
@@ -30,11 +30,10 @@ const refreshLiveStreams = async () => {
     console.log("starting refresh")
     let videoList = await getVideoList();
     let videosInfo = await getVideoInfo(videoList);
-
     let streamingVideoList = [];
     //loop through all the videosInfo and combine it into a new object
     for(i = 0; i<videoList.length; i++) {
-        let liveStreamingDetails = videosInfo.data.items[i].liveStreamingDetails
+        let liveStreamingDetails = videosInfo[i].liveStreamingDetails
         if (liveStreamingDetails) {
             streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails})
         }
@@ -57,7 +56,6 @@ const refreshLiveStreams = async () => {
         console.log("fresh")
         // res.status(200).send({success:true, message:'fresh, no need to data update'})
     }        
-    // res.status(400).send({success:false, message:"failed to refresh data"})
 }
 
 module.exports = {
