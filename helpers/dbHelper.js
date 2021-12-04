@@ -56,4 +56,11 @@ module.exports = class DbHelper {
             if (err) return console.error("could not date fetched data");            
         })
     }
+    getVideoCount() {
+        let query = {};
+        return Video.find(query, function (err, videos) {
+            if (err) return console.error(err);
+        }).count()
+    }
+
 }

@@ -60,10 +60,11 @@ const refreshLiveStreams = async () => {
             streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails})
         }
     }
-    
     let dateFetched = await dbHelper.getLastDateFetched();
-    
-    if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 1 ) {
+    let videoCount = await dbHelper.getVideoCount(); 
+
+    //when running for the first time we need to check if there is any data otherwise it will not create the collection
+    if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 1 || videoCount === 0 ) {
         writeToDb(streamingVideoList);
         console.log("outdated")
         // res.status(200).send({success:true, message:'outdated, fetching new data'})
