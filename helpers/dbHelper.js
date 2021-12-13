@@ -60,7 +60,7 @@ module.exports = class DbHelper {
         let query = {};
         return Video.find(query, function (err, videos) {
             if (err) return console.error(err);
-        }).count()
+        }).countDocuments()
     }
 
 }
