@@ -9,7 +9,7 @@ const moment = require('moment')
  * @param {*} req 
  * @param {*} res 
  */
-const getLiveStreams = async (req,res)=>{
+const getLivestreams = async (req,res)=>{
     try {
         await refreshLiveStreams();
     }
@@ -17,7 +17,7 @@ const getLiveStreams = async (req,res)=>{
         res.status(500).json({success: false, msg: "failed to refresh streams"})
     }
     try {
-        let liveStreams = await dbHelper.getLiveStreams()
+        let liveStreams = await dbHelper.getLivestreams()
         res.status(200).json({success: true, data: liveStreams})
     }
     catch (error) {
@@ -33,6 +33,24 @@ const getAllVideos = async (req, res) => {
     res.status(200).json({success: true, data: videos})
 }
 
+/**
+ * Returns most recent archived streams
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getArchivedVideos = async (req, res) => {
+    let archivedVideos = await dbHelper.getArchivedVideos();
+    res.status(200).json({success: true, data: archivedVideos})
+}
+/**
+ * Returns upcoming livestreams streams
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getUpcomingLivestreams = async (req,res) => {
+    let upcomingVideos = await dbHelper.getUpcomingLiveStreams();
+    res.status(200).json({success: true, data: upcomingVideos});
+}
 /**
  * Update the db with the latest live streaming info for each video
  * @param {*} streamingVideoList 
@@ -76,6 +94,8 @@ const refreshLiveStreams = async () => {
 }
 
 module.exports = {
-    getLiveStreams,
-    getAllVideos
+    getLivestreams,
+    getAllVideos,
+    getArchivedVideos,
+    getUpcomingLivestreams
 }

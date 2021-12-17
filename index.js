@@ -9,7 +9,6 @@ app.use('/api/v1/videos', videos)
 const start = async () => {
     try {
         await DbConnectionHelper(url)
-        
         app.listen(process.env.PORT || 3001, ()=> {
             console.log(`Server is listening on port ${process.env.PORT || 3001}....`)
         }) 

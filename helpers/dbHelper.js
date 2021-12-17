@@ -31,9 +31,16 @@ module.exports = class DbHelper {
             if (err) return console.error("error from upsert", err);
         });
     }
-    getLiveStreams() {
+    getLivestreams() {
         let query = {'concurrentViewers': {$ne: null}}; 
         return Video.find(query ,function (err, videos) {
+            if (err) return console.error(err);
+        })
+    }
+    getArchivedVideos() {
+        // add query to filter out live streams and only display last uploaded video
+        let query = {'concurrentViewers': {$eq: null}, 'actualStartTime':{$ne: null}};
+        return Video.find(query, function (err, videos) {
             if (err) return console.error(err);
         })
     }
