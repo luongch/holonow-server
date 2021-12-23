@@ -61,7 +61,6 @@ const writeToDb = (streamingVideoList) => {
     });
 }
 
-
 /**
  * If data is outdated update all livestream data in db
  */
@@ -74,8 +73,11 @@ const refreshLiveStreams = async () => {
     //loop through all the videosInfo and combine it into a new object
     for(i = 0; i<videoList.length; i++) {
         let liveStreamingDetails = videosInfo[i].liveStreamingDetails
+        let thumbnailDetails = {
+            thumbnails: videosInfo[i].snippet.thumbnails
+        }; 
         if (liveStreamingDetails) {
-            streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails})
+            streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails, ...thumbnailDetails})
         }
     }
     let dateFetched = await dbHelper.getLastDateFetched();

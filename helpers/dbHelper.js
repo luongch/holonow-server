@@ -6,11 +6,11 @@ const extractVideoData = (videoData) => {
         channelId: videoData.channelId,
         title: videoData.title,
         author: videoData.author,
-        dateFetched: videoData.dateFetched,
         scheduledStartTime: videoData.scheduledStartTime ? videoData.scheduledStartTime : null,
         actualStartTime: videoData.actualStartTime ? videoData.actualStartTime : null,
         concurrentViewers: videoData.concurrentViewers ? videoData.concurrentViewers : null,
-        activeLiveChatId: videoData.activeLiveChatId ? videoData.activeLiveChatId : null
+        activeLiveChatId: videoData.activeLiveChatId ? videoData.activeLiveChatId : null,
+        thumbnails: videoData.thumbnails
     }).toObject();  //this toObject was needed in order for me to remove _id so findOneAndUpdate works,
     // otherwise it will try to update everything including _id which is immutable
     //https://stackoverflow.com/a/63265811
