@@ -15,7 +15,7 @@ const getVideoInfo = async (videoList) => {
     for(const chunkedList of chunkedVideoIdList) {
         let info = await google.youtube('v3').videos.list({
             key: process.env.YOUTUBE_TOKEN,
-            part: 'liveStreamingDetails',
+            part: 'liveStreamingDetails, snippet',
             id: chunkedList
             });
         videoInfo.push.apply(videoInfo, info.data.items);
