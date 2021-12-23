@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const moment = require('moment')
+//https://stackoverflow.com/a/39597985
 const ThumbnailSchema = new mongoose.Schema({
     url: {
         type: String,
