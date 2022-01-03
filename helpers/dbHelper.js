@@ -38,14 +38,12 @@ module.exports = class DbHelper {
         })
     }
     getArchivedVideos() {
-        // add query to filter out live streams and only display last uploaded video
         let query = {'concurrentViewers': {$eq: null}, 'actualStartTime':{$ne: null}};
         return Video.find(query, function (err, videos) {
             if (err) return console.error(err);
         })
     }
     getAllVideos() {
-        // add query to filter out live streams and only display last uploaded video
         let query = {};
         return Video.find(query, function (err, videos) {
             if (err) return console.error(err);
@@ -69,5 +67,4 @@ module.exports = class DbHelper {
             if (err) return console.error(err);
         }).countDocuments()
     }
-
 }

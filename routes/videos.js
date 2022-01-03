@@ -8,10 +8,10 @@ const {
     // refreshLiveStreams
 } = require('../controllers/live')
 
-router.get('/live', getLivestreams);
 router.get('/', getAllVideos);
-router.get('/archived', getArchivedVideos);
+router.get('/live', getLivestreams);
 router.get('/upcoming', getUpcomingLivestreams)
+router.get('/archived', getArchivedVideos);
 // router.get('/', refreshLiveStreams)
 
 module.exports = router;

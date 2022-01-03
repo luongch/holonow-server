@@ -23,6 +23,7 @@ const ThumbnailListSchema = new mongoose.Schema({
     standard: ThumbnailSchema,
     maxres: ThumbnailSchema
 });
+
 const videoSchema = new mongoose.Schema({
     id: {
         type: String,
