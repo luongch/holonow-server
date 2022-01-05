@@ -41,7 +41,7 @@ module.exports = class DbHelper {
         let query = {'concurrentViewers': {$eq: null}, 'actualStartTime':{$ne: null}};
         return Video.find(query, function (err, videos) {
             if (err) return console.error(err);
-        })
+        }).sort({'actualStartTime':-1})
     }
     getAllVideos() {
         let query = {};
@@ -54,7 +54,7 @@ module.exports = class DbHelper {
         let query = {'scheduledStartTime':{'$gt': currentDate}}
         return Video.find(query, function (err, videos) {
             if (err) return console.error(err);
-        })
+        }).sort({'scheduledStartTime':1})
     }
     getLastDateFetched() {
         return Video.findOne({},'dateFetched', { sort: { 'dateFetched': -1 } }, function (err, result) {
