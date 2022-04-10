@@ -11,6 +11,7 @@ const moment = require('moment')
  */
 const getLivestreams = async (req,res)=>{
     try {
+        console.log("before refresh")
         await refreshLiveStreams();
     }
     catch(error){
