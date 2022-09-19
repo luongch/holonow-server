@@ -3,6 +3,7 @@ const videos = require('../routes/videos')
 const dotenv = require('dotenv');
 dotenv.config();
 const url = process.env.MONGO_URL
+var createError = require('http-errors');
 
 const connectDb = require('../helpers/connectDb');
 
@@ -15,8 +16,6 @@ const createServer = function(mongoDbUri) {
 
     // catch 404 and forward to error handler
     app.use(function(req, res, next) {
-        console.log("caught 404")
-        console.log(res)
         next(createError(404));
     });
 

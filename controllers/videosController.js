@@ -8,30 +8,21 @@ const moment = require('moment')
  * @param {*} req 
  * @param {*} res 
  */
-const getLivestreams = async (req,res)=>{
-    try {
-        console.log("before refresh")
-        await refreshLiveStreams();
-    }
-    catch(error){
-        res.status(500).json({success: false, msg: "failed to refresh streams"})
-    }
-    try {
-        console.log("before getLivestreams")
-        let liveStreams = await dbHelper.getLivestreams()
-        res.status(200).json({success: true, data: liveStreams})
-    }
-    catch (error) {
-        res.status(500).json({success: false, msg: error})
-    }    
+const getLivestreams = async (req, res, next)=>{
+    // try {
+    //     console.log("before getLivestreams")
+        dbHelper.getLivestreams(req,res,next)
+    // }
+    // catch (error) {
+    //     res.status(500).json({success: false, msg: error})
+    // }    
 }
 
 /**
  * Returns all of the latest non live videos
  */
-const getAllVideos = async (req, res) => {
-    let videos = await dbHelper.getAllVideos()
-    res.status(200).json({success: true, data: videos})
+const getAllVideos = (req, res, next) => {
+    dbHelper.getAllVideos(req,res)
 }
 
 /**
@@ -39,26 +30,24 @@ const getAllVideos = async (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getArchivedVideos = async (req, res) => {
-    let archivedVideos = await dbHelper.getArchivedVideos();
-    res.status(200).json({success: true, data: archivedVideos})
+const getArchivedVideos = (req, res, next) => {
+    dbHelper.getArchivedVideos(req,res,next);
 }
 /**
  * Returns upcoming livestreams streams
  * @param {*} req 
  * @param {*} res 
  */
-const getUpcomingLivestreams = async (req,res) => {
-    let upcomingVideos = await dbHelper.getUpcomingLiveStreams();
-    res.status(200).json({success: true, data: upcomingVideos});
+const getUpcomingLivestreams = (req,res, next) => {
+    dbHelper.getUpcomingLiveStreams(req,res);
 }
 /**
  * Update the db with the latest live streaming info for each video
  * @param {*} streamingVideoList 
  */
-const writeToDb = (streamingVideoList) => {
+const writeToDb = (req,res,next,streamingVideoList) => {
     streamingVideoList.forEach(video => {
-        dbHelper.upsert(video)
+        dbHelper.upsert(video,next)
     });
 }
 

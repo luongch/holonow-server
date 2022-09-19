@@ -1,10 +1,9 @@
 const mongoose = require('mongoose')
 
-const connectDb = async (uri) => {
-    mongoose.set('useFindAndModify', false);
-    mongoose.set('useNewUrlParser', true)
-    mongoose.set('useUnifiedTopology', true)
-    await mongoose.connect(uri)
+const connectDb = async (uri) => {   
+    await mongoose.connect(uri, { useNewUrlParser: true , useUnifiedTopology: true });
+    const db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'MongoDB connection error:'))
     console.log('conn ready:  ' + mongoose.connection.readyState);
 }
 

@@ -23,51 +23,77 @@ module.exports = class DbHelper {
         
     }
 
-    upsert(videoData) {
+    upsert(videoData,next) {
         let video = extractVideoData(videoData)
         let query = {'channelId': video.channelId};
 
-        Video.findOneAndUpdate(query, video, {upsert: true, new: true}, function (err, vid) {
-            if (err) return console.error("error from upsert", err);
+        Video.findOneAndUpdate(query, video, {upsert: true, new: true})
+        .exec(function (err, vid) {
+            if (err) {
+                console.error("error from upsert", err);
+                next(err)
+            }
         });
     }
-    getLivestreams() {
+    getLivestreams(req,res,next) {
         let query = {'concurrentViewers': {$ne: null}}; 
-        return Video.find(query ,function (err, videos) {
+        Video.find(query)
+        .exec(function (err, liveStreams) {
             if (err) {
                 console.log("error in getLivestreams")
-                return console.error(err);
+                next(err)
             } 
+            res.status(200).json({data: liveStreams})
         })
     }
-    getArchivedVideos() {
+    getArchivedVideos(req,res,next) {
         let query = {'concurrentViewers': {$eq: null}, 'actualStartTime':{$ne: null}};
-        return Video.find(query, function (err, videos) {
-            if (err) return console.error(err);
-        }).sort({'actualStartTime':-1})
-    }
-    getAllVideos() {
-        let query = {};
-        return Video.find(query, function (err, videos) {
-            if (err) return console.error(err);
+        Video.find(query).sort({'actualStartTime':-1})
+        .exec( function (err, archivedVideos) {
+            if(err){
+                next(err)
+                console.error(err);
+            }   
+            res.status(200).json({data: archivedVideos})
         })
     }
-    getUpcomingLiveStreams() {
+    getAllVideos(req,res,next) {
+        let query = {};
+        Video.find(query)
+        .exec(function (err, videos) {
+            if (err) {
+                next(err)
+                console.error(err);
+            } 
+            res.status(200).json({data: videos})
+        })
+    }
+    getUpcomingLiveStreams(req,res) {
         let currentDate = new Date().toISOString();
         let query = {'scheduledStartTime':{'$gt': currentDate}}
-        return Video.find(query, function (err, videos) {
-            if (err) return console.error(err);
-        }).sort({'scheduledStartTime':1})
+        Video.find(query).sort({'scheduledStartTime':1})
+        .exec(function (err, upcomingVideos) {
+            if (err) {
+                console.error(err);
+                next(err)
+            }
+            res.status(200).json({data: upcomingVideos});
+        })
     }
     getLastDateFetched() {
-        return Video.findOne({},'dateFetched', { sort: { 'dateFetched': -1 } }, function (err, result) {
-            if (err) return console.error("could not date fetched data");            
+        return Video.findOne({},'dateFetched', { sort: { 'dateFetched': -1 } })
+        .exec( function (err, result) {
+            if (err) return console.error("could not get date fetched data"); 
+            console.log("got last date fetched", result)           
         })
     }
     getVideoCount() {
         let query = {};
-        return Video.find(query, function (err, videos) {
+        return Video.find(query)
+        .countDocuments()
+        .exec(function (err, videos) {
             if (err) return console.error(err);
-        }).countDocuments()
+        })
+
     }
 }
