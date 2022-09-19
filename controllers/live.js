@@ -18,6 +18,7 @@ const getLivestreams = async (req,res)=>{
         res.status(500).json({success: false, msg: "failed to refresh streams"})
     }
     try {
+        console.log("before getLivestreams")
         let liveStreams = await dbHelper.getLivestreams()
         res.status(200).json({success: true, data: liveStreams})
     }
@@ -100,5 +101,6 @@ module.exports = {
     getLivestreams,
     getAllVideos,
     getArchivedVideos,
-    getUpcomingLivestreams
+    getUpcomingLivestreams,
+    refreshLiveStreams
 }

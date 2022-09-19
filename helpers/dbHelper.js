@@ -34,7 +34,10 @@ module.exports = class DbHelper {
     getLivestreams() {
         let query = {'concurrentViewers': {$ne: null}}; 
         return Video.find(query ,function (err, videos) {
-            if (err) return console.error(err);
+            if (err) {
+                console.log("error in getLivestreams")
+                return console.error(err);
+            } 
         })
     }
     getArchivedVideos() {

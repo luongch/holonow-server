@@ -4,8 +4,8 @@ const {
     getLivestreams,
     getAllVideos,
     getArchivedVideos,
-    getUpcomingLivestreams
-    // refreshLiveStreams
+    getUpcomingLivestreams,
+    refreshLiveStreams
 } = require('../controllers/live')
 
 router.get('/', getAllVideos);
