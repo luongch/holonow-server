@@ -2,9 +2,9 @@
   "name": "holo-now-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon ./server/index.js"
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
