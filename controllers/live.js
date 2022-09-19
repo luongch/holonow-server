@@ -1,5 +1,4 @@
-const getVideoList = require('../search/video-list-api')
-const getVideoInfo = require('../search/video-info-api')
+const youtubeHelper = require("../helpers/youtubeHelper")
 const DbHelper = require('../helpers/dbHelper')
 const dbHelper = new DbHelper();
 const moment = require('moment')
@@ -69,8 +68,8 @@ const writeToDb = (streamingVideoList) => {
 const refreshLiveStreams = async () => {
     // get all the videos latest videos for each channel
     console.log("starting refresh")
-    let videoList = await getVideoList();
-    let videosInfo = await getVideoInfo(videoList);
+    let videoList = await youtubeHelper.getVideoList();
+    let videosInfo = await youtubeHelper.getVideoInfo(videoList);
     let streamingVideoList = [];
     //loop through all the videosInfo and combine it into a new object
     for(i = 0; i<videoList.length; i++) {
