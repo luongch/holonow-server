@@ -28,6 +28,7 @@ environment running
 8. in .env add mongodb uri to MONGO_URL
 9. in .env add youtube api key to YOUTUBE_TOKEN
 
+After starting the server with npm run start
 You should now be able to call http://localhost:{port}/api/v1/videos and get all videos/livestreams
 
 
