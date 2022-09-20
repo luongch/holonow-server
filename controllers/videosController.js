@@ -54,7 +54,7 @@ const writeToDb = (req,res,next,streamingVideoList) => {
 /**
  * If data is outdated update all livestream data in db
  */
-const refreshLiveStreams = async () => {
+const refreshLiveStreams = async (req,res,next) => {
     // get all the videos latest videos for each channel
     console.log("starting refresh")
     let videoList = await youtubeHelper.getVideoList();
@@ -70,12 +70,16 @@ const refreshLiveStreams = async () => {
             streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails, ...thumbnailDetails})
         }
     }
-    let dateFetched = await dbHelper.getLastDateFetched();
-    let videoCount = await dbHelper.getVideoCount(); 
-
+    let dateFetched = await dbHelper.getLastDateFetched(req,res,next);
+    let videoCount = await dbHelper.getVideoCount(req,res,next); 
+    
+    if(!dateFetched && !videoCount) {
+        next(new Error("Couldn't get last dateFetched or videoCount"))
+        return
+    }
     //when running for the first time we need to check if there is any data otherwise it will not create the collection
     if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 1 || videoCount === 0 ) {
-        writeToDb(streamingVideoList);
+        writeToDb(req,res,next,streamingVideoList);
         console.log("outdated")
         // res.status(200).send({success:true, message:'outdated, fetching new data'})
     }

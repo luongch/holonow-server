@@ -80,20 +80,26 @@ module.exports = class DbHelper {
             res.status(200).json({data: upcomingVideos});
         })
     }
-    getLastDateFetched() {
+    getLastDateFetched(req,res,next) {
         return Video.findOne({},'dateFetched', { sort: { 'dateFetched': -1 } })
-        .exec( function (err, result) {
-            if (err) return console.error("could not get date fetched data"); 
-            console.log("got last date fetched", result)           
+        .exec(function(err) {
+            if(err) {
+                next(err)
+            }
         })
+        
     }
-    getVideoCount() {
+    getVideoCount(req,res,next) {
         let query = {};
         return Video.find(query)
         .countDocuments()
-        .exec(function (err, videos) {
-            if (err) return console.error(err);
-        })
+        .exec(
+            function(err) {
+                if(err) {
+                    next(err)
+                }
+            }
+        )
 
     }
 }
