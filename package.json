@@ -15,7 +15,7 @@
     "express": "^4.17.1",
     "googleapis": "^80.1.0",
     "http-errors": "^2.0.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "mongoose": "^6.6.1",
     "xml2js": "^0.4.23"
   },
