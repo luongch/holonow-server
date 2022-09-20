@@ -72,9 +72,9 @@ const refreshLiveStreams = async (req,res,next) => {
     }
     let dateFetched = await dbHelper.getLastDateFetched(req,res,next);
     let videoCount = await dbHelper.getVideoCount(req,res,next); 
-    
+
     if(!dateFetched && !videoCount) {
-        next(new Error("Couldn't get last dateFetched or videoCount"))
+        next(new Error("Couldn't get last dateFetched and videoCount"))
         return
     }
     //when running for the first time we need to check if there is any data otherwise it will not create the collection

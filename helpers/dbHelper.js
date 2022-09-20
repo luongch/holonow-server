@@ -81,25 +81,25 @@ module.exports = class DbHelper {
         })
     }
     getLastDateFetched(req,res,next) {
-        return Video.findOne({},'dateFetched', { sort: { 'dateFetched': -1 } })
-        .exec(function(err) {
-            if(err) {
-                next(err)
-            }
-        })
+        try {
+            return Video.findOne({},'dateFetched', { sort: { 'dateFetched': -1 } })
+            .exec()//why can't you put a function in exec? you used to be able to
+        }        
+        catch(err) {
+            next(new Error("Couldn't get last dateFetched"))
+        } 
         
     }
     getVideoCount(req,res,next) {
         let query = {};
-        return Video.find(query)
-        .countDocuments()
-        .exec(
-            function(err) {
-                if(err) {
-                    next(err)
-                }
-            }
-        )
-
+        try {
+            return Video.find(query)
+            .countDocuments()
+            .exec()
+        }
+        catch(err) {
+            next(new Error("Couldn't get videoCount"))
+        }
+        
     }
 }
