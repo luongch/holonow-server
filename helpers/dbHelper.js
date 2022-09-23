@@ -23,6 +23,17 @@ module.exports = class DbHelper {
         
     }
 
+    addVideo(videoData, next) {
+        let video = extractVideoData(videoData)
+        let query = {'id': video.id};
+        Video.findOneAndUpdate(query, video, {upsert: true, new: true})
+        .exec(function (err, vid) {
+            if (err) {
+                console.error("error from upsert", err);
+                next(err)
+            }
+        });
+    }
     upsert(videoData,next) {
         let video = extractVideoData(videoData)
         let query = {'channelId': video.channelId};

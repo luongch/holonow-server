@@ -10,11 +10,12 @@ const {
 
 // router.get('/', getAllVideos);
 router.get('/live', 
-    function(req,res,next) {
-        refreshLiveStreams(req,res,next)
+    async function(req,res,next) {
+        await refreshLiveStreams(req,res,next)
         next()
     },
     function(req,res,next) {
+        console.log("getting live streams")
         getLivestreams(req,res,next)
     }
 );

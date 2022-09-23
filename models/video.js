@@ -36,11 +36,11 @@ const videoSchema = new mongoose.Schema({
     },
     concurrentViewers: {
         type: Number,
-        required:[true, 'must provide concurrent viewers']
+        // required:[true, 'must provide concurrent viewers']
     },
     activeLiveChatId: {
         type: String,
-        required:[true, 'must provide active live chat id']
+        // required:[true, 'must provide active live chat id']
     },
     thumbnails: ThumbnailListSchema
 });

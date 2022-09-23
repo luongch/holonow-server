@@ -61,19 +61,20 @@ const chunkArray = (videoIdList) => {
 /**
  * Given a string of xml data, parse it and return the first(latest) video in the feed
  */
-const extractVideoData = (data) =>{
-  let video = {}; 
+const extractVideoData = (data, videoList) =>{
   parseString(data, function (err, result) {
     if(typeof result.feed.entry !== "undefined") { //validation for channels with no videos
-      video = {
-        id: result.feed.entry[0]['yt:videoId'][0],
-        channelId: result.feed.entry[0]['yt:channelId'][0],
-        title: result.feed.entry[0].title[0],
-        author: result.feed.entry[0].author[0].name[0]
-      }
+      for(let i = 0; i< 1; i++) { //only get the first two because sometimes the first video isn't the livestream
+        let video = {
+          id: result.feed.entry[i]['yt:videoId'][0],
+          channelId: result.feed.entry[i]['yt:channelId'][0],
+          title: result.feed.entry[i].title[0],
+          author: result.feed.entry[i].author[0].name[0]
+        }
+        videoList.push(video)
+      }      
     }
   });
-  return video;
 }
 
 /**
@@ -81,6 +82,7 @@ const extractVideoData = (data) =>{
  * @returns A filtered list of videos from all channels
  */
 const getVideoList = async() => {
+  let videoList = [];
   const xmlFetches = channels.map((channel) => (
     axios.get('https://www.youtube.com/feeds/videos.xml', {
       params: {
@@ -89,14 +91,15 @@ const getVideoList = async() => {
       },
     })
     .then((xmlResult) => {
-      return extractVideoData(xmlResult.data)
+      extractVideoData(xmlResult.data, videoList)
     })
     .catch((error)=>{
         console.log(error)
     })
   ));
   
-  let videoList = (await Promise.all(xmlFetches)).flat();
+  await Promise.all(xmlFetches);
+  //for each channel filter out any that have no videos
   return videoList.filter(videos => Object.keys(videos).length !== 0 ); //we need to filter out any empty objects that result from channels with no videos
 };
 
