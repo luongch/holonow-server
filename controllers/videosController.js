@@ -2,7 +2,8 @@ const youtubeHelper = require("../helpers/youtubeHelper")
 const DbHelper = require('../helpers/dbHelper')
 const dbHelper = new DbHelper();
 const moment = require('moment')
-
+const {cache, addToCache, existsInCache} = require('../utils/cache')
+const { performance } = require('perf_hooks');
 /**
  * Refreshes all live stream data and then returns all live streams
  * @param {*} req
@@ -46,31 +47,47 @@ const getUpcomingLivestreams = (req,res, next) => {
  * @param {*} streamingVideoList
  */
 const writeToDb = (req,res,next,streamingVideoList) => {
+    let startTime = performance.now()
+
     streamingVideoList.forEach(video => {
         // dbHelper.upsert(video,next)
         dbHelper.addVideo(video,next)
     });
+    let endTime = performance.now()
+
+    console.log(`Call to write to db took ${endTime - startTime} milliseconds`)
 }
 
 /**
  * If data is outdated update all livestream data in db
  */
 const refreshLiveStreams = async (req,res,next) => {
+    var startTime = performance.now()
+
     // get all the videos latest videos for each channel
     console.log("starting refresh")
     let videoList = await youtubeHelper.getVideoList();
     let videosInfo = await youtubeHelper.getVideoInfo(videoList);
     let streamingVideoList = [];
     //loop through all the videosInfo and combine it into a new object
-    for(i = 0; i<videoList.length; i++) {
+    console.log("length", videosInfo.length)
+    let count = 0
+    for(let i = videosInfo.length-1; i >= 0; i--) {
         let liveStreamingDetails = videosInfo[i].liveStreamingDetails
+        // console.log(videosInfo[i].id, liveStreamingDetails)
+        if(videosInfo[i].liveStreamingDetails) {
+            count++
+        }
         let thumbnailDetails = {
             thumbnails: videosInfo[i].snippet.thumbnails
         };
-        if (liveStreamingDetails) {
+        //&& !existsInCache(videosInfo[i].id)
+        if (liveStreamingDetails ) {
             streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails, ...thumbnailDetails})
+            addToCache(videosInfo[i])
         }
     }
+    console.log("count", count)
     let dateFetched = await dbHelper.getLastDateFetched(req,res,next);
     let videoCount = await dbHelper.getVideoCount(req,res,next);
 
@@ -90,6 +107,9 @@ const refreshLiveStreams = async (req,res,next) => {
         console.log("fresh")
         // res.status(200).send({success:true, message:'fresh, no need to data update'})
     }
+    var endTime = performance.now()
+
+    console.log(`Call to refresh livestreams took ${endTime - startTime} milliseconds`)
 }
 
 module.exports = {

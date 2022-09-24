@@ -11,7 +11,6 @@ const createServer = function(mongoDbUri) {
     
     const app = express();
     connectDb(url)
-    
     app.use('/api/v1/videos', videos)
 
     // catch 404 and forward to error handler

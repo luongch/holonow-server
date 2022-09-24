@@ -31,6 +31,14 @@ environment running
 After starting the server with npm run start
 You should now be able to call http://localhost:{port}/api/v1/videos and get all videos/livestreams
 
+## Challenges
+- limited to 10000 quota per day using youtube API
+-- getting videos from channels > playlist > video would cost around (numChannels*2)+1, currently look up 53 channels so it would only be able to refresh the livestreams 19 times because I have to wait 24 hours
+-- workaround: use the free RRS feed
+--- this doesn't always update right away so some livestreams appear as live when they have already ended 
+
+## Things to do
+- make use of cache to avoid writing to the db everytime
 
 ## Deployment
 

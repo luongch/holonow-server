@@ -5,6 +5,8 @@ const axios = require('axios');
 const parseString = require('xml2js').parseString;
 const moment = require('moment')
 const {google} = require('googleapis');
+const { cache, existsInCache,addToCache } = require('../utils/cache');
+const { performance } = require('perf_hooks');
 
 /**
  * Given a list of video ids, calls Youtube api to get all the livestreaming details for each video
@@ -12,6 +14,8 @@ const {google} = require('googleapis');
  * @returns array of video info
  */
 const getVideoInfo = async (videoList) => {
+  let startTime = performance.now()
+
     let videoIdList = getVideoIds(videoList)
     let chunkedVideoIdList = chunkArray(videoIdList)
     
@@ -23,8 +27,12 @@ const getVideoInfo = async (videoList) => {
             part: 'liveStreamingDetails, snippet',
             id: chunkedList
             });
+            
         videoInfo.push.apply(videoInfo, info.data.items);
-    }    
+    }
+    let endTime = performance.now()
+
+    console.log(`Call to youtube API took ${endTime - startTime} milliseconds`)
     return videoInfo;
 };
 
@@ -61,7 +69,7 @@ const chunkArray = (videoIdList) => {
 /**
  * Given a string of xml data, parse it and return the first(latest) video in the feed
  */
-const extractVideoData = (data, videoList) =>{
+const extractVideoData = (data, videoList) =>{    
   parseString(data, function (err, result) {
     if(typeof result.feed.entry !== "undefined") { //validation for channels with no videos
       for(let i = 0; i< 1; i++) { //only get the first two because sometimes the first video isn't the livestream
@@ -82,12 +90,14 @@ const extractVideoData = (data, videoList) =>{
  * @returns A filtered list of videos from all channels
  */
 const getVideoList = async() => {
+  let startTime = performance.now()
+
   let videoList = [];
   const xmlFetches = channels.map((channel) => (
     axios.get('https://www.youtube.com/feeds/videos.xml', {
       params: {
         channel_id: channel.id,
-        t: moment(),
+        
       },
     })
     .then((xmlResult) => {
@@ -100,6 +110,9 @@ const getVideoList = async() => {
   
   await Promise.all(xmlFetches);
   //for each channel filter out any that have no videos
+  let endTime = performance.now()
+
+  console.log(`Call to get XML data took ${endTime - startTime} milliseconds`)
   return videoList.filter(videos => Object.keys(videos).length !== 0 ); //we need to filter out any empty objects that result from channels with no videos
 };
 

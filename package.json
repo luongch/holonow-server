@@ -17,6 +17,7 @@
     "http-errors": "^2.0.0",
     "moment": "^2.29.4",
     "mongoose": "^6.6.1",
+    "node-cache": "^5.1.2",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
