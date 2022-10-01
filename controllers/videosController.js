@@ -7,8 +7,8 @@ const { performance } = require('perf_hooks');
 
 const searchVideos = (req,res,next) => {
     console.log("searching")    
-    let match = "Kiara HoloCure"
-    dbHelper.search(req,res,next,match)
+    let searchTerms = req.body.searchTerms
+    dbHelper.search(req,res,next,searchTerms)
 
 }
 /**

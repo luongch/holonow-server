@@ -46,4 +46,7 @@ const videoSchema = new mongoose.Schema({
 });
 
 videoSchema.index({ title: 'text', author: 'text' });
+// https://stackoverflow.com/questions/24714166/full-text-search-with-weight-in-mongoose
+// https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/read-operations/text/
+
 module.exports = mongoose.model('Video', videoSchema)
