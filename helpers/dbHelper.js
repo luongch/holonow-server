@@ -25,6 +25,7 @@ module.exports = class DbHelper {
     search(req,res,next, searchTerms) {
         let query =  { $text : { $search : searchTerms } };
         Video.find(query)
+        .sort({'scheduledStartTime':-1})
         .exec(function (err, results) {
             if (err) {
                 console.log("error in results")
