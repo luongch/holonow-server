@@ -72,7 +72,8 @@ const chunkArray = (videoIdList) => {
 const extractVideoData = (data, videoList) =>{    
   parseString(data, function (err, result) {
     if(typeof result.feed.entry !== "undefined") { //validation for channels with no videos
-      for(let i = 0; i< 1; i++) { //only get the first two because sometimes the first video isn't the livestream
+      // for(let i = 0; i< result.feed.entry.length; i++) {
+      for(let i = 0; i<2; i++) { //only get the first two because sometimes the first video isn't the livestream
         let video = {
           id: result.feed.entry[i]['yt:videoId'][0],
           channelId: result.feed.entry[i]['yt:channelId'][0],

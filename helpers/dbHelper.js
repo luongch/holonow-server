@@ -22,7 +22,21 @@ module.exports = class DbHelper {
     constructor() {
         
     }
-
+    search(req,res,next, searchTerms) {
+        // https://www.youtube.com/watch?v=IcZbd-WhKE4
+    // look into Text search mongodb
+    // https://stackoverflow.com/questions/24714166/full-text-search-with-weight-in-mongoose
+    // https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/read-operations/text/
+        let query = { $or:[{title: { $regex: searchTerms }},{author:{$regex:searchTerms}}] }
+        Video.find(query)
+        .exec(function (err, results) {
+            if (err) {
+                console.log("error in results")
+                next(err)
+            } 
+            res.status(200).json({data: results})
+        })
+    }
     addVideo(videoData, next) {
         let video = extractVideoData(videoData)
         let query = {'id': video.id};

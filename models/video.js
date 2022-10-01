@@ -45,5 +45,5 @@ const videoSchema = new mongoose.Schema({
     thumbnails: ThumbnailListSchema
 });
 
-
+videoSchema.index({ title: 'text', author: 'text' });
 module.exports = mongoose.model('Video', videoSchema)

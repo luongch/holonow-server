@@ -5,7 +5,8 @@ const {
     getAllVideos,
     getArchivedVideos,
     getUpcomingLivestreams,
-    refreshLiveStreams
+    refreshLiveStreams,
+    searchVideos
 } = require('../controllers/videosController')
 
 // router.get('/', getAllVideos);
@@ -22,5 +23,6 @@ router.get('/live',
 router.get('/upcoming', getUpcomingLivestreams)
 router.get('/archived', getArchivedVideos);
 router.get('/', refreshLiveStreams)
+router.get('/search', searchVideos)
 
 module.exports = router;
