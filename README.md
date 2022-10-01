@@ -38,12 +38,12 @@ You should now be able to call http://localhost:{port}/api/v1/videos and get all
     - this doesn't always update right away so some livestreams appear as live when they have already ended 
 
 ## Things to do
-- make use of cache to avoid writing to the db everytime
-- add table for authors that includes their profile pic
-- add endpoints to create users
-- add authentication
-- add favorites for users
-- add ability to search
+- [ ] make use of cache to avoid writing to the db everytime
+- [ ] add table for authors that includes their profile pic
+- [ ] add endpoints to create users
+- [ ] add authentication
+- [ ] add favorites for users
+- [x] add search endpoint
 
 ## Deployment
 
