@@ -40,6 +40,7 @@ const getArchivedVideos = (req, res, next) => {
  * @param {*} res
  */
 const getUpcomingLivestreams = (req,res, next) => {
+    console.log("this is the current user", req.user)
     dbHelper.getUpcomingLiveStreams(req,res);
 }
 /**

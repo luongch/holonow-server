@@ -1,9 +1,12 @@
 const express = require('express');
-const videos = require('../routes/videos')
+const videoRoutes = require('../routes/videos')
+const authRoutes = require('../routes/authentication')
 const dotenv = require('dotenv');
 dotenv.config();
 const url = process.env.MONGO_URL
 var createError = require('http-errors');
+var session = require('express-session');
+const passport = require('passport')
 
 const connectDb = require('../helpers/connectDb');
 
@@ -11,8 +14,22 @@ const createServer = function(mongoDbUri) {
     
     const app = express();
     app.use(express.json()); //this is needed in order to parse data from req.body
+    
+    app.use(session({
+        secret: 'keyboard cat',
+        resave: false,
+        saveUninitialized: false
+      }));
+    app.use(passport.authenticate('session'));
+
+    app.use(function(req, res, next) {
+        res.locals.currentUser = req.user;
+        next();
+      });
+      
     connectDb(url)
-    app.use('/api/v1/videos', videos)
+    app.use('/api/v1/videos', videoRoutes)
+    app.use('/api/v1/', authRoutes)
 
     // catch 404 and forward to error handler
     app.use(function(req, res, next) {
