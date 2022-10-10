@@ -1,6 +1,8 @@
 const express = require('express');
 const videoRoutes = require('../routes/videos')
 const authRoutes = require('../routes/authentication')
+const favRoutes = require('../routes/favorites')
+require('./passport')
 const dotenv = require('dotenv');
 dotenv.config();
 const url = process.env.MONGO_URL
@@ -30,6 +32,7 @@ const createServer = function(mongoDbUri) {
     connectDb(url)
     app.use('/api/v1/videos', videoRoutes)
     app.use('/api/v1/', authRoutes)
+    app.use('/api/v1/favorites', favRoutes)
 
     // catch 404 and forward to error handler
     app.use(function(req, res, next) {

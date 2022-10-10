@@ -1,18 +1,12 @@
-const youtubeHelper = require("../helpers/youtubeHelper")
-const DbHelper = require('../helpers/dbHelper')
-const dbHelper = new DbHelper();
-
-
-const authenticate = (req,res,next) => {
-    console.log("logging in")
-    console.log("done logging in")
-}
-
 const logout = (req,res,next) => {
     console.log("logging out")
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        console.log("successfully logged out")
+        res.redirect("/api/v1/videos/archived")
+    });
 }
 
 module.exports = {
-    authenticate,
     logout
 }
