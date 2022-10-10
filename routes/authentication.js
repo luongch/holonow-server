@@ -6,9 +6,13 @@ const {
 const passport = require('passport')
 
 
-router.get('/login/federated/google', passport.authenticate('google'));
+router.get('/login/federated/google', function(req,res,next){
+    console.log("testing")
+    next();
+}, passport.authenticate('google'));
 router.get('/oauth2/redirect/google', passport.authenticate('google', {
-    successRedirect: '/api/v1/favorites/',
+    successRedirect: 'http://localhost:3000/api/v1/videos/upcoming',
+    // successRedirect: '/api/v1/favorites/',
     failureRedirect: '/login'
 }));
 

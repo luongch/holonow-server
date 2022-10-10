@@ -15,6 +15,7 @@ const connectDb = require('../helpers/connectDb');
 const createServer = function(mongoDbUri) {
     
     const app = express();
+
     app.use(express.json()); //this is needed in order to parse data from req.body
     
     app.use(session({
