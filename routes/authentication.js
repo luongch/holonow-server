@@ -17,8 +17,9 @@ router.get('/oauth2/redirect/google',
         //or after the middleware check if there is a user, if there isn't return an error?
     }),
     function(req,res) {    
-        //force google login page to close after login
-        res.send('<script>window.close()</script>');
+        //https://stackoverflow.com/a/29314111
+        //redirect the parent window and then close the pop up
+        res.send('<script>if(window.opener){window.opener.location="http://localhost:3000/"; window.close()}</script>');
     }
 );
 
