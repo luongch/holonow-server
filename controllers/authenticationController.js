@@ -7,6 +7,13 @@ const logout = (req,res,next) => {
     });
 }
 
+const getSession = (req,res,next) => {
+    res.status(200).send({
+        user: req.user
+    })
+}
+
 module.exports = {
-    logout
+    logout,
+    getSession
 }
