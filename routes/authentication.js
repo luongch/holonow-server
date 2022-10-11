@@ -19,6 +19,7 @@ router.get('/oauth2/redirect/google',
     function(req,res) {    
         //https://stackoverflow.com/a/29314111
         //redirect the parent window and then close the pop up
+        //TODO - make a redirect endpoint and have this script called in a redirect component
         res.send('<script>if(window.opener){window.opener.location="http://localhost:3000/"; window.close()}</script>');
     }
 );
