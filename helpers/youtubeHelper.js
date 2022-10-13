@@ -9,6 +9,30 @@ const { cache, existsInCache,addToCache } = require('../utils/cache');
 const { performance } = require('perf_hooks');
 
 /**
+ * 
+ */
+const getChannelInfo = async () => {
+  console.log("getting channel info")
+  
+  let channelIds  = channels.map(channel => {
+    return channel.id
+  })
+
+  let chunkedChannelList = chunkArray(channelIds)
+
+  let channelInfo = [];
+  for(let chunkedChannels of chunkedChannelList) {
+    let info = await google.youtube('v3').channels.list({
+      key: process.env.YOUTUBE_TOKEN,    
+      id: chunkedChannels.toString(), //id must start before part
+      part: "snippet,contentDetails,statistics",
+    })
+    channelInfo.push.apply(channelInfo, info.data.items)
+  }
+  return channelInfo;
+}
+
+/**
  * Given a list of video ids, calls Youtube api to get all the livestreaming details for each video
  * @param {*} videoList 
  * @returns array of video info
@@ -16,24 +40,24 @@ const { performance } = require('perf_hooks');
 const getVideoInfo = async (videoList) => {
   let startTime = performance.now()
 
-    let videoIdList = getVideoIds(videoList)
-    let chunkedVideoIdList = chunkArray(videoIdList)
-    
-    let videoInfo = [];
-    
-    for(const chunkedList of chunkedVideoIdList) {
-        let info = await google.youtube('v3').videos.list({
-            key: process.env.YOUTUBE_TOKEN,
-            part: 'liveStreamingDetails, snippet',
-            id: chunkedList
-            });
-            
-        videoInfo.push.apply(videoInfo, info.data.items);
-    }
-    let endTime = performance.now()
+  let videoIdList = getVideoIds(videoList)
+  let chunkedVideoIdList = chunkArray(videoIdList)
+  
+  let videoInfo = [];
+  
+  for(const chunkedList of chunkedVideoIdList) {
+      let info = await google.youtube('v3').videos.list({
+          key: process.env.YOUTUBE_TOKEN,
+          part: 'liveStreamingDetails, snippet',
+          id: chunkedList
+          });
+          
+      videoInfo.push.apply(videoInfo, info.data.items);
+  }
+  let endTime = performance.now()
 
-    console.log(`Call to youtube API took ${endTime - startTime} milliseconds`)
-    return videoInfo;
+  console.log(`Call to youtube API took ${endTime - startTime} milliseconds`)
+  return videoInfo;
 };
 
 /**
@@ -117,4 +141,4 @@ const getVideoList = async() => {
   return videoList.filter(videos => Object.keys(videos).length !== 0 ); //we need to filter out any empty objects that result from channels with no videos
 };
 
-module.exports = {getVideoInfo,getVideoList}
+module.exports = {getVideoInfo,getVideoList,getChannelInfo}

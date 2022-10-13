@@ -1,4 +1,5 @@
 const Video = require('../models/video')
+const Channel = require('../models/channel')
 
 const extractVideoData = (videoData) => {
     let video = new Video({
@@ -21,6 +22,37 @@ const extractVideoData = (videoData) => {
 module.exports = class DbHelper {
     constructor() {
         
+    }
+    addChannel(channel) {
+        let query = {'id': channel.id};
+        Channel.findOneAndUpdate(query, channel, {upsert: true, new:true})
+        .exec(function(err,channel) {
+            if(err) {
+                console.error("error from channel upsert", err)
+            }
+        })
+    }
+    getChannel(req,res,next) {
+        let query = {'id':req.params.id}
+        Channel.find(query)
+        .exec(function(err, results) {
+            if(err) {
+                console.log("err getting channel")
+                next(err)
+            }
+            res.status(200).json({data:results})
+        })
+    }
+    getAllChannels(req,res,next) {
+        let query = {};
+        Channel.find(query)
+        .exec(function(err, results) {
+            if(err) {
+                console.log("err getting channels")
+                next(err)
+            }
+            res.status(200).json({data:results})
+        })
     }
     search(req,res,next, searchTerms) {
         let query =  { $text : { $search : searchTerms } };
@@ -123,5 +155,16 @@ module.exports = class DbHelper {
             next(new Error("Couldn't get videoCount"))
         }
         
+    }
+    getChannelCount() {
+        let query = {};
+        try {
+            return Channel.find(query)
+            .countDocuments()
+            .exec()
+        }
+        catch(err) {
+            next(new Error("Couldn't get channelCount"))
+        }
     }
 }

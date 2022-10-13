@@ -2,15 +2,22 @@ const express = require('express');
 const videoRoutes = require('../routes/videos')
 const authRoutes = require('../routes/authentication')
 const favRoutes = require('../routes/favorites')
-require('./passport')
+const channelsRoutes = require('../routes/channels')
+
 const dotenv = require('dotenv');
 dotenv.config();
 const url = process.env.MONGO_URL
+
 var createError = require('http-errors');
+
+require('./passport')
 var session = require('express-session');
 const passport = require('passport')
 
 const connectDb = require('../helpers/connectDb');
+
+const youtubeHelper = require("../helpers/youtubeHelper")
+const {setupHelper} = require('../helpers/setupHelper')
 
 const createServer = function(mongoDbUri) {
     
@@ -34,6 +41,11 @@ const createServer = function(mongoDbUri) {
     app.use('/api/v1/videos', videoRoutes)
     app.use('/api/v1/', authRoutes)
     app.use('/api/v1/favorites', favRoutes)
+    app.use('/api/v1/channels', channelsRoutes)
+
+
+    setupHelper()
+    // youtubeHelper.getChannelInfo()
 
     // catch 404 and forward to error handler
     app.use(function(req, res, next) {
