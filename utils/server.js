@@ -43,9 +43,7 @@ const createServer = function(mongoDbUri) {
     app.use('/api/v1/favorites', favRoutes)
     app.use('/api/v1/channels', channelsRoutes)
 
-
     setupHelper()
-    // youtubeHelper.getChannelInfo()
 
     // catch 404 and forward to error handler
     app.use(function(req, res, next) {

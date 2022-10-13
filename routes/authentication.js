@@ -8,7 +8,6 @@ const passport = require('passport')
 
 
 router.get('/login/federated/google', function(req,res,next){
-    console.log("testing")
     next();
 }, passport.authenticate('google'));
 router.get('/oauth2/redirect/google',
@@ -22,7 +21,6 @@ router.get('/oauth2/redirect/google',
         //redirect the parent window and then close the pop up
         //TODO - make a redirect endpoint and have this script called in a redirect component
         res.redirect("http://localhost:3000/login/redirect")
-        // res.send('<script>if(window.opener){window.opener.location="http://localhost:3000/"; window.close()}</script>');
     }
 );
 
