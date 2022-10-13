@@ -27,6 +27,7 @@ environment running
 7. Create a .env file
 8. in .env add mongodb uri to MONGO_URL
 9. in .env add youtube api key to YOUTUBE_TOKEN
+10. TODO: add instructions on how to setup OAuth 2.0 Client IDs
 
 After starting the server with npm run start
 You should now be able to call http://localhost:{port}/api/v1/videos and get all videos/livestreams
@@ -40,10 +41,11 @@ You should now be able to call http://localhost:{port}/api/v1/videos and get all
 ## Things to do
 - [ ] make use of cache to avoid writing to the db everytime
 - [ ] add table for authors that includes their profile pic
-- [ ] add endpoints to create users
-- [ ] add authentication
+- [x] add authentication
 - [ ] add favorites for users
 - [x] add search endpoint
+- [ ] add documentation on how to setup OAuth 2.0 Client IDs
+- [ ] deploy it somewhere
 
 ## Deployment
 
