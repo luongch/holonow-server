@@ -45,7 +45,7 @@ const videoSchema = new mongoose.Schema({
     thumbnails: ThumbnailListSchema
 });
 
-videoSchema.index({ title: 'text', author: 'text' });
+videoSchema.index({ title: 'text', author: 'text', channelId: 'text' });
 // https://stackoverflow.com/questions/24714166/full-text-search-with-weight-in-mongoose
 // https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/read-operations/text/
 
