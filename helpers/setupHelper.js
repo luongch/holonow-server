@@ -37,7 +37,7 @@ const refreshChannels = async () => {
             title: channel.snippet.title,
             subscribers: channel.statistics.subscriberCount,
             thumbnail: {
-                url: channel.snippet.thumbnails.high.url,
+                url: channel.snippet.thumbnails.default.url,
                 width: channel.snippet.thumbnails.width,
                 height: channel.snippet.thumbnails.height,
             }
