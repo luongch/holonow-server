@@ -3,6 +3,7 @@ const channels = require('../channel_ids.json');
 const Channel = require('../models/channel')
 const DbHelper = require('../helpers/dbHelper')
 const dbHelper = new DbHelper();
+const youtubeHelper = require("./youtubeHelper")
 
 const setupHelper = async () => {
     console.log("setting up")
@@ -11,9 +12,19 @@ const setupHelper = async () => {
     if(channelCount < channels.length) {
         refreshChannels()
     }
+    // getAllVideos()
 
-    //add code to refresh all livestreams on start up
     //add code to set up interval to refresh livestreams
+}
+
+/**
+ * Get all past videos and livestreams from XML on server start up
+ */
+const getAllVideos = async () => {
+    let streamingVideoList = await youtubeHelper.getLiveStreams(refreshAll = true)
+    streamingVideoList.forEach(video => {
+        dbHelper.addVideo(video)
+    });
 }
 
 const refreshChannels = async () => {

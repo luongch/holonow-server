@@ -3,7 +3,6 @@ const channels = require('../channel_ids.json');
 // const channels = require('../channel_ids copy.json');
 const axios = require('axios');
 const parseString = require('xml2js').parseString;
-const moment = require('moment')
 const {google} = require('googleapis');
 const { cache, existsInCache,addToCache } = require('../utils/cache');
 const { performance } = require('perf_hooks');
@@ -93,11 +92,12 @@ const chunkArray = (videoIdList) => {
 /**
  * Given a string of xml data, parse it and return the first(latest) video in the feed
  */
-const extractVideoData = (data, videoList) =>{    
+const extractVideoData = (data, videoList, refreshAll=true) =>{    
   parseString(data, function (err, result) {
     if(typeof result.feed.entry !== "undefined") { //validation for channels with no videos
-      // for(let i = 0; i< result.feed.entry.length; i++) {
-      for(let i = 0; i<2n; i++) { //only get the first two because sometimes the first video isn't the livestream
+      let numVideosToExtract = refreshAll ? result.feed.entry.length : 2
+      console.log("numVideosToExtract", numVideosToExtract)
+      for(let i = 0; i<numVideosToExtract; i++) { //only get the first two because sometimes the first video isn't the livestream
         let video = {
           id: result.feed.entry[i]['yt:videoId'][0],
           channelId: result.feed.entry[i]['yt:channelId'][0],
@@ -114,7 +114,7 @@ const extractVideoData = (data, videoList) =>{
  * Calls youtube's video xml feed and gets a list of all videos per channel
  * @returns A filtered list of videos from all channels
  */
-const getVideoList = async() => {
+const getVideoList = async(refreshAll) => {
   let startTime = performance.now()
 
   let videoList = [];
@@ -126,7 +126,7 @@ const getVideoList = async() => {
       },
     })
     .then((xmlResult) => {
-      extractVideoData(xmlResult.data, videoList)
+      extractVideoData(xmlResult.data, videoList,refreshAll)
     })
     .catch((error)=>{
         console.log(error)
@@ -141,4 +141,26 @@ const getVideoList = async() => {
   return videoList.filter(videos => Object.keys(videos).length !== 0 ); //we need to filter out any empty objects that result from channels with no videos
 };
 
-module.exports = {getVideoInfo,getVideoList,getChannelInfo}
+const getLiveStreams = async(refreshAll = true) => {
+  console.log("starting refresh")
+  let videoList = await getVideoList(refreshAll);
+  let videosInfo = await getVideoInfo(videoList);
+  let streamingVideoList = [];
+  //loop through all the videosInfo and combine it into a new object
+  for(let i = videosInfo.length-1; i >= 0; i--) {
+      let liveStreamingDetails = videosInfo[i].liveStreamingDetails
+      let thumbnailDetails = {
+          thumbnails: videosInfo[i].snippet.thumbnails
+      };
+      //&& !existsInCache(videosInfo[i].id)
+      if (liveStreamingDetails ) {
+          streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails, ...thumbnailDetails})
+          addToCache(videosInfo[i])
+      }
+  }
+
+  return streamingVideoList
+
+}
+
+module.exports = {getVideoInfo,getVideoList,getChannelInfo, getLiveStreams}

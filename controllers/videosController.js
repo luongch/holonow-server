@@ -47,12 +47,11 @@ const getUpcomingLivestreams = (req,res, next) => {
  * Update the db with the latest live streaming info for each video
  * @param {*} streamingVideoList
  */
-const writeToDb = (req,res,next,streamingVideoList) => {
+const writeToDb = (streamingVideoList) => {
     let startTime = performance.now()
 
     streamingVideoList.forEach(video => {
-        // dbHelper.upsert(video,next)
-        dbHelper.addVideo(video,next)
+        dbHelper.addVideo(video)
     });
     let endTime = performance.now()
 
@@ -65,27 +64,11 @@ const writeToDb = (req,res,next,streamingVideoList) => {
 const refreshLiveStreams = async (req,res,next) => {
     var startTime = performance.now()
 
-    // get all the videos latest videos for each channel
-    console.log("starting refresh")
-    let videoList = await youtubeHelper.getVideoList();
-    let videosInfo = await youtubeHelper.getVideoInfo(videoList);
-    let streamingVideoList = [];
-    //loop through all the videosInfo and combine it into a new object
-    for(let i = videosInfo.length-1; i >= 0; i--) {
-        let liveStreamingDetails = videosInfo[i].liveStreamingDetails
-        let thumbnailDetails = {
-            thumbnails: videosInfo[i].snippet.thumbnails
-        };
-        //&& !existsInCache(videosInfo[i].id)
-        if (liveStreamingDetails ) {
-            streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails, ...thumbnailDetails})
-            addToCache(videosInfo[i])
-        }
-    }
+    let streamingVideoList = await youtubeHelper.getLiveStreams(refreshAll = false);
 
     let videoCount = await dbHelper.getVideoCount(req,res,next);
     if(videoCount == 0) { //if it is the first time getting videos
-        writeToDb(req,res,next,streamingVideoList); 
+        writeToDb(streamingVideoList); 
     }
     let dateFetched = await dbHelper.getLastDateFetched(req,res,next);
     
@@ -94,10 +77,11 @@ const refreshLiveStreams = async (req,res,next) => {
         return
     }
     //when running for the first time we need to check if there is any data otherwise it will not create the collection
+    
     if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 1 || videoCount === 0 ) {
-        // console.log(streamingVideoList)
+        writeToDb(streamingVideoList);
         console.log("outdated")
-        writeToDb(req,res,next,streamingVideoList);        
+        
     }
     else {
         console.log("fresh")
