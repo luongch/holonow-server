@@ -8,7 +8,6 @@ const { performance } = require('perf_hooks');
 const searchVideos = (req,res,next) => {
     let searchTerms = req.query.searchTerms
     dbHelper.search(req,res,next,searchTerms)
-
 }
 /**
  * Refreshes all live stream data and then returns all live streams
@@ -40,7 +39,6 @@ const getArchivedVideos = (req, res, next) => {
  * @param {*} res
  */
 const getUpcomingLivestreams = (req,res, next) => {
-    console.log("this is the current user", req.user)
     dbHelper.getUpcomingLiveStreams(req,res);
 }
 /**

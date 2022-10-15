@@ -95,8 +95,7 @@ const chunkArray = (videoIdList) => {
 const extractVideoData = (data, videoList, refreshAll=true) =>{    
   parseString(data, function (err, result) {
     if(typeof result.feed.entry !== "undefined") { //validation for channels with no videos
-      let numVideosToExtract = refreshAll ? result.feed.entry.length : 2
-      console.log("numVideosToExtract", numVideosToExtract)
+      let numVideosToExtract = refreshAll ? result.feed.entry.length : 2      
       for(let i = 0; i<numVideosToExtract; i++) { //only get the first two because sometimes the first video isn't the livestream
         let video = {
           id: result.feed.entry[i]['yt:videoId'][0],
@@ -126,7 +125,7 @@ const getVideoList = async(refreshAll) => {
       },
     })
     .then((xmlResult) => {
-      extractVideoData(xmlResult.data, videoList,refreshAll)
+      extractVideoData(xmlResult.data, videoList, refreshAll)
     })
     .catch((error)=>{
         console.log(error)
@@ -134,10 +133,11 @@ const getVideoList = async(refreshAll) => {
   ));
   
   await Promise.all(xmlFetches);
-  //for each channel filter out any that have no videos
-  let endTime = performance.now()
 
+  let endTime = performance.now()
   console.log(`Call to get XML data took ${endTime - startTime} milliseconds`)
+
+  //for each channel filter out any that have no videos
   return videoList.filter(videos => Object.keys(videos).length !== 0 ); //we need to filter out any empty objects that result from channels with no videos
 };
 
