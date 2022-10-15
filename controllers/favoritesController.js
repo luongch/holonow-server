@@ -3,9 +3,8 @@ const Video = require('../models/video')
 
 const getFavorites = async (req,res,next) => {
     if(!req.isAuthenticated()) {
-        res.status(200).json({
-            data: "not authorized"
-        })
+        //TODO: send proper error
+        console.log("not authenticated")
     }
     else {
         let query = {"googleId": req.user.googleId}
@@ -29,18 +28,17 @@ const getFavorites = async (req,res,next) => {
 
 const addToFavorites = async (req,res,next) => {
     if(!req.isAuthenticated()) {
-        res.status(200).json({
-            data: "not authorized"
-        })
+        //TODO: send proper error
+        console.log("not authenticated")
     }
     else {
         let query = {"googleId": req.user.googleId}
         let user = await User.findOne({query})
-        console.log("addToFavorites",req.body)
 
         //check if channelId is already favorited
         if(user.favorites.includes(req.body.channelId)) {
-            //error this already exists
+            //TODO: send proper error
+            console.log("already favorited")
         }
         else {
             user.favorites.push(req.body.channelId)
@@ -57,9 +55,8 @@ const addToFavorites = async (req,res,next) => {
 
 const removeFromFavorites = async (req,res,next) => {
     if(!req.isAuthenticated()) {
-        res.status(200).json({
-            data: "not authorized"
-        })
+        //TODO: send proper error
+        console.log("not authenticated")
     }
     else {
         let query = {"googleId": req.user.googleId}
