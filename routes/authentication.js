@@ -5,7 +5,8 @@ const {
     getSession
 } = require('../controllers/authenticationController')
 const passport = require('passport')
-
+const dotenv = require('dotenv');
+dotenv.config();
 
 router.get('/login/federated/google', function(req,res,next){
     next();
@@ -20,7 +21,14 @@ router.get('/oauth2/redirect/google',
         //https://stackoverflow.com/a/29314111
         //redirect the parent window and then close the pop up
         //TODO - make a redirect endpoint and have this script called in a redirect component
-        res.redirect("http://localhost:3000/login/redirect")
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+            // dev code
+            res.redirect("http://localhost:3000/login/redirect")
+        } else {
+            // production code
+            res.redirect("https://holonow.netlify.app/login/redirect")
+        }
+        
     }
 );
 
