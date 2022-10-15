@@ -8,11 +8,10 @@ const { cache, existsInCache,addToCache } = require('../utils/cache');
 const { performance } = require('perf_hooks');
 
 /**
- * 
+ * Get all channel info
+ * @returns array of channel info
  */
 const getChannelInfo = async () => {
-  console.log("getting channel info")
-  
   let channelIds  = channels.map(channel => {
     return channel.id
   })
@@ -90,13 +89,16 @@ const chunkArray = (videoIdList) => {
 
 
 /**
- * Given a string of xml data, parse it and return the first(latest) video in the feed
+ * Given a string of xml data, parse it and return the videos in the feed
+ * @param {*} data 
+ * @param {*} videoList 
+ * @param {*} refreshAll determines whether to extract all videos or just the latest 2 (sometimes the latest 1 isn't the livestream)
  */
 const extractVideoData = (data, videoList, refreshAll=true) =>{    
   parseString(data, function (err, result) {
     if(typeof result.feed.entry !== "undefined") { //validation for channels with no videos
       let numVideosToExtract = refreshAll ? result.feed.entry.length : 2      
-      for(let i = 0; i<numVideosToExtract; i++) { //only get the first two because sometimes the first video isn't the livestream
+      for(let i = 0; i<numVideosToExtract; i++) {
         let video = {
           id: result.feed.entry[i]['yt:videoId'][0],
           channelId: result.feed.entry[i]['yt:channelId'][0],
@@ -125,6 +127,7 @@ const getVideoList = async(refreshAll) => {
       },
     })
     .then((xmlResult) => {
+      //TODO check the cache, xmlResult has more videos than the cache then we need to extract the video data
       extractVideoData(xmlResult.data, videoList, refreshAll)
     })
     .catch((error)=>{

@@ -3,9 +3,9 @@ const Video = require('../models/video')
 
 const getFavorites = async (req,res,next) => {
     if(!req.isAuthenticated()) {
-        console.log("not authenticated")
-        //redirect to login page?
-        //or just show the login button in front end
+        res.status(200).json({
+            data: "not authorized"
+        })
     }
     else {
         let query = {"googleId": req.user.googleId}
@@ -29,8 +29,9 @@ const getFavorites = async (req,res,next) => {
 
 const addToFavorites = async (req,res,next) => {
     if(!req.isAuthenticated()) {
-        //throw error?
-        console.log("not authenticated")
+        res.status(200).json({
+            data: "not authorized"
+        })
     }
     else {
         let query = {"googleId": req.user.googleId}
@@ -56,7 +57,9 @@ const addToFavorites = async (req,res,next) => {
 
 const removeFromFavorites = async (req,res,next) => {
     if(!req.isAuthenticated()) {
-        //throw error?
+        res.status(200).json({
+            data: "not authorized"
+        })
     }
     else {
         let query = {"googleId": req.user.googleId}
