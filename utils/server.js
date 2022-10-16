@@ -3,7 +3,8 @@ const videoRoutes = require('../routes/videos')
 const authRoutes = require('../routes/authentication')
 const favRoutes = require('../routes/favorites')
 const channelsRoutes = require('../routes/channels')
-
+const cors = require('cors')
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const dotenv = require('dotenv');
 dotenv.config();
 const url = process.env.MONGO_URL
@@ -22,7 +23,19 @@ const {setupHelper} = require('../helpers/setupHelper')
 const createServer = function(mongoDbUri) {
     
     const app = express();
-
+    app.use(cors());
+    // let proxy = createProxyMiddleware({
+    //       target: isDevEnvironment ? process.env.REACT_APP_DEV_PROXY_HOST : process.env.REACT_APP_PROD_PROXY_HOST,
+    //       changeOrigin: true,
+    //     })
+    // app.use(
+    //   '/api', // You can pass in an array too eg. ['/api', '/another/path']
+    //   createProxyMiddleware({
+    //     target: isDevEnvironment ? process.env.REACT_APP_DEV_PROXY_HOST : process.env.REACT_APP_PROD_PROXY_HOST,
+    //     changeOrigin: true,
+    //   })
+    // );
+    
     app.use(express.json()); //this is needed in order to parse data from req.body
     
     app.use(session({
@@ -53,5 +66,8 @@ const createServer = function(mongoDbUri) {
     return app
 }
 
+const isDevEnvironment = () => {
+  return !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+}
 
 module.exports = createServer
