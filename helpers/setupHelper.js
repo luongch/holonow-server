@@ -12,7 +12,7 @@ const setupHelper = async () => {
     if(channelCount < channels.length) {
         refreshChannels()
     }
-    // getAllVideos()
+    getAllVideos()
 
     //add code to set up interval to refresh livestreams
 }

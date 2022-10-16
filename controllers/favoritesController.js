@@ -32,6 +32,7 @@ const addToFavorites = async (req,res,next) => {
         console.log("not authenticated")
     }
     else {
+        console.log("adding to fav")
         let query = {"googleId": req.user.googleId}
         let user = await User.findOne({query})
 
@@ -59,6 +60,7 @@ const removeFromFavorites = async (req,res,next) => {
         console.log("not authenticated")
     }
     else {
+        console.log("remove from fav")
         let query = {"googleId": req.user.googleId}
         let user = await User.findOne({query})
 
