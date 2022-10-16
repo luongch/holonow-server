@@ -35,5 +35,10 @@ router.get('/oauth2/redirect/google',
 // http://localhost:3001/api/v1/logout
 router.post('/logout', logout);
 router.get('/session', getSession)
+router.get('/health', function(req,res,next){
+    res.status(200).json({
+        data: 'ok'
+    })
+})
 
 module.exports = router;
