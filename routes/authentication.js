@@ -26,7 +26,7 @@ router.get('/oauth2/redirect/google',
             res.redirect("http://localhost:3000/login/redirect")
         } else {
             // production code
-            res.redirect("https://holonow.netlify.app/live")
+            res.redirect("https://holonow.onrender.com/login/redirect")
         }
         
     }
