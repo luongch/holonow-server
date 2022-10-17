@@ -25,21 +25,21 @@ const createServer = function(mongoDbUri) {
     app.use(cors())
     app.use(express.json()); //this is needed in order to parse data from req.body
     
-    // app.use(session({
-    //     secret: 'keyboard cat',
-    //     resave: false,
-    //     saveUninitialized: false
-    //   }));
-    app.use( session({
-      secret: "secretcode",
-      resave: true,
-      saveUninitialized: true,
-      cookie: {
-        sameSite: "none",
-        secure: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7 // One Week
-      }
-    }));
+    app.use(session({
+        secret: 'keyboard cat',
+        resave: false,
+        saveUninitialized: false
+      }));
+    // app.use( session({
+    //   secret: "secretcode",
+    //   resave: true,
+    //   saveUninitialized: true,
+    //   cookie: {
+    //     sameSite: "none",
+    //     secure: true,
+    //     maxAge: 1000 * 60 * 60 * 24 * 7 // One Week
+    //   }
+    // }));
     app.set("trust proxy", 1)
     app.use(passport.authenticate('session'));
 

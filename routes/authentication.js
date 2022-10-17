@@ -14,7 +14,8 @@ router.get('/login/federated/google', function(req,res,next){
 router.get('/oauth2/redirect/google',
     passport.authenticate('google', {
         // successRedirect: '/api/v1/favorites/',
-        failureRedirect: '/api/v1/health' //redirect to an error endpoint?
+        failureRedirect: '/api/v1/health', //redirect to an error endpoint?
+        session:true
         //or after the middleware check if there is a user, if there isn't return an error?
     }),
     function(req,res) {    
@@ -23,7 +24,7 @@ router.get('/oauth2/redirect/google',
         //TODO - make a redirect endpoint and have this script called in a redirect component
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
             // dev code
-            res.redirect("http://localhost:3000/login/redirect")
+            res.redirect("http://localhost:3000/login/")
         } else {
             // production code
             res.redirect("https://holonow.netlify.app/login/redirect")
