@@ -23,7 +23,7 @@ passport.use(
     }, function verify(issuer, profile, cb) {
         console.log("passport callback function fired")
         let query = {'googleId': profile.id};
-        User.findOne(query, function(err, user){
+        User.findOne(query, async function(err, user){
             if(err) {
                 return cb(err)
             }
@@ -34,8 +34,9 @@ passport.use(
                     googleId: profile.id,
                     name: profile.name
                 }
-                new User(user).save()
-                return cb(null,user)
+                let newUser = new User(user)
+                await newUser.save()
+                return cb(null,newUser)
             }
             else {
                 console.log("this user already exists")
@@ -55,10 +56,10 @@ passport.serializeUser(function(user, done) {
   });
   
 passport.deserializeUser(function(id, done) {
-    console.log("deserializeUser")
+    console.log("deserializeUser", id)
     User.findById(id, (err, doc) => {
         // Whatever we return goes to the client and binds to the req.user property
-        console.log(doc)
+        console.log("we found this user", doc)
         return done(null, doc);
     })
     // process.nextTick(function() {
