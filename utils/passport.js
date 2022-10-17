@@ -11,7 +11,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     callbackUrl='/api/v1/oauth2/redirect/google'
 } else {
     // production code
-    callbackUrl='https://holonow.netlify.app/api/v1/oauth2/redirect/google'
+    callbackUrl='https://holonowapi.onrender.com/api/v1/oauth2/redirect/google'
 }
 
 passport.use(
