@@ -1,10 +1,13 @@
-const logout = (req,res,next) => {
-    console.log("logging out")
-    req.logout(function(err) {
-        if (err) { return next(err); }
-        console.log("successfully logged out")
-        res.send("successfully logged out")
-    });
+const logout = (req,res,next) => {    
+    if(req.user) {
+        console.log("logging out user:", req.user)
+        req.logout(function(err) {
+            if (err) { return next(err); }
+            console.log("successfully logged out")
+            res.send("successfully logged out")
+        });
+    }
+    
 }
 
 const getSession = (req,res,next) => {
