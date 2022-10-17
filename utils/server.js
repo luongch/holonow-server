@@ -22,7 +22,10 @@ const {setupHelper} = require('../helpers/setupHelper')
 const createServer = function(mongoDbUri) {
     
     const app = express();
-    app.use(cors())
+    let corsOptions = {
+      credentials: true
+    }
+    app.use(cors(corsOptions))
     app.use(express.json()); //this is needed in order to parse data from req.body
     
     // app.use(session({
