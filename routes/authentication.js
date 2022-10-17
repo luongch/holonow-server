@@ -14,7 +14,7 @@ router.get('/login/federated/google', function(req,res,next){
 router.get('/oauth2/redirect/google',
     passport.authenticate('google', {
         // successRedirect: '/api/v1/favorites/',
-        failureRedirect: '/login' //redirect to an error endpoint?
+        failureRedirect: '/api/v1/health' //redirect to an error endpoint?
         //or after the middleware check if there is a user, if there isn't return an error?
     }),
     function(req,res) {    
