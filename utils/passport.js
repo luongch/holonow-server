@@ -35,18 +35,24 @@ passport.use(
         })
     })
 )
-passport.serializeUser(function(user, cb) {
+passport.serializeUser(function(user, done) {
     console.log("serializeUser")
-    console.log(user)
-    process.nextTick(function() {
-        console.log("in process.nextTick")
-      cb(null, { id: user.id, username: user.username, name:user.name });
-    });
+    console.log(user._id)
+    return done(null, user._id);
+    // process.nextTick(function() {
+    //     console.log("in process.nextTick")
+    //   cb(null, { id: user.id, username: user.username, name:user.name });
+    // });
   });
   
-passport.deserializeUser(function(user, cb) {
+passport.deserializeUser(function(id, done) {
     console.log("deserializeUser")
-    process.nextTick(function() {
-        return cb(null, user);
-    });
+    User.findById(id, (err, doc) => {
+        // Whatever we return goes to the client and binds to the req.user property
+        console.log(doc)
+        return done(null, doc);
+    })
+    // process.nextTick(function() {
+    //     return cb(null, user);
+    // });
 });

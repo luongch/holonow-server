@@ -30,6 +30,16 @@ const createServer = function(mongoDbUri) {
         resave: false,
         saveUninitialized: false
       }));
+    // app.use( session({
+    //   secret: "secretcode",
+    //   resave: true,
+    //   saveUninitialized: true,
+    //   cookie: {
+    //     sameSite: "none",
+    //     secure: true,
+    //     maxAge: 1000 * 60 * 60 * 24 * 7 // One Week
+    //   }
+    // }));
     app.use(passport.authenticate('session'));
 
     app.use(function(req, res, next) {
