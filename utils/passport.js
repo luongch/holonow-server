@@ -5,9 +5,18 @@ dotenv.config();
 const User = require('../models/user')
 
 //http://localhost:3001/api/v1/login/federated/google
+let callbackUrl = ''
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    // dev code
+    callbackUrl='/api/v1/oauth2/redirect/google'
+} else {
+    // production code
+    callbackUrl='https://holonow.netlify.app/api/v1/oauth2/redirect/google'
+}
+
 passport.use(
     new GoogleStrategy({
-        callbackURL: '/api/v1/oauth2/redirect/google',
+        callbackURL: callbackUrl,
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         scope: [ 'profile' ]
