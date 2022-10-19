@@ -27,6 +27,7 @@ const createServer = function(mongoDbUri) {
     }
     app.use(cors(corsOptions))
     app.use(express.json()); //this is needed in order to parse data from req.body
+    app.set("trust proxy", 1)
     
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
       // dev code
@@ -50,8 +51,11 @@ const createServer = function(mongoDbUri) {
     }
     
     
-    app.set("trust proxy", 1)
-    app.use(passport.authenticate('session'));
+    
+    // app.use(passport.authenticate('session'));
+    app.use(passport.initialize());
+    app.use(passport.session());
+
       
     connectDb(url)
     app.use('/api/v1/videos', videoRoutes)

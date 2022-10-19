@@ -16,16 +16,15 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 
 passport.use(
     new GoogleStrategy({
-        callbackURL: callbackUrl,
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        scope: [ 'profile' ]
+        callbackURL: callbackUrl,
     }, function verify(request, accessToken, refreshToken, profile, done) {
         console.log("passport callback function fired")
         let query = {'googleId': profile.id};
         User.findOne(query, async function(err, user){
             if(err) {
-                return done(err)
+                return done(err, null)
             }
             if(!user) {
                 console.log("add new user to db")
@@ -36,11 +35,11 @@ passport.use(
                 }
                 let newUser = new User(user)
                 await newUser.save()
-                return done(null,newUser)
+                done(null,newUser)
             }
             else {
                 console.log("this user already exists")
-                return done(null,user)
+                done(null,user)
             }
         })
     })

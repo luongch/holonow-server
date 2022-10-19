@@ -10,7 +10,7 @@ dotenv.config();
 
 router.get('/login/federated/google', function(req,res,next){
     next();
-}, passport.authenticate('google'));
+}, passport.authenticate('google', { scope: ['profile'] }));
 router.get('/oauth2/redirect/google',
     passport.authenticate('google', {
         // successRedirect: '/api/v1/favorites/',
@@ -27,7 +27,7 @@ router.get('/oauth2/redirect/google',
             res.redirect("http://localhost:3000/login")
         } else {
             // production code
-            res.redirect("https://holonow.netlify.app/login/redirect")
+            res.redirect("https://holonow.netlify.app/login")
         }
         
     }
