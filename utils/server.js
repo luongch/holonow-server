@@ -60,7 +60,7 @@ const createServer = function() {
       
     
     app.use('/api/v1/videos', videoRoutes)
-    app.use('/api/v1/', authRoutes)
+    app.use('/api/v1', authRoutes)
     app.use('/api/v1/favorites', favRoutes)
     app.use('/api/v1/channels', channelsRoutes)
 
