@@ -1,5 +1,5 @@
 const passport = require('passport')
-const GoogleStrategy = require('passport-google-oidc');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const dotenv = require('dotenv');
 dotenv.config();
 const User = require('../models/user')
@@ -20,12 +20,12 @@ passport.use(
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         scope: [ 'profile' ]
-    }, function verify(issuer, profile, cb) {
+    }, function verify(request, accessToken, refreshToken, profile, done) {
         console.log("passport callback function fired")
         let query = {'googleId': profile.id};
         User.findOne(query, async function(err, user){
             if(err) {
-                return cb(err)
+                return done(err)
             }
             if(!user) {
                 console.log("add new user to db")
@@ -36,11 +36,11 @@ passport.use(
                 }
                 let newUser = new User(user)
                 await newUser.save()
-                return cb(null,newUser)
+                return done(null,newUser)
             }
             else {
                 console.log("this user already exists")
-                return cb(null,user)
+                return done(null,user)
             }
         })
     })

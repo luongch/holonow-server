@@ -21,7 +21,7 @@
     "mongoose": "^6.6.1",
     "node-cache": "^5.1.2",
     "passport": "^0.6.0",
-    "passport-google-oidc": "^0.1.0",
+    "passport-google-oauth20": "^2.0.0",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {

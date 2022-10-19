@@ -28,28 +28,30 @@ const createServer = function(mongoDbUri) {
     app.use(cors(corsOptions))
     app.use(express.json()); //this is needed in order to parse data from req.body
     
-    // app.use(session({
-    //     secret: 'keyboard cat',
-    //     resave: false,
-    //     saveUninitialized: false
-    //   }));
-    app.use( session({
-      secret: "secretcode",
-      resave: true,
-      saveUninitialized: true,
-      cookie: {
-        sameSite: "none",
-        secure: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7 // One Week
-      }
-    }));
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+      // dev code
+      app.use(session({
+        secret: 'keyboard cat',
+        resave: false,
+        saveUninitialized: false
+      }));
+    } else {
+        // production code
+        app.use( session({
+          secret: "secretcode",
+          resave: true,
+          saveUninitialized: true,
+          cookie: {
+            sameSite: "none",
+            secure: true,
+            maxAge: 1000 * 60 * 60 * 24 * 7 // One Week
+          }
+        }));
+    }
+    
+    
     app.set("trust proxy", 1)
     app.use(passport.authenticate('session'));
-
-    app.use(function(req, res, next) {
-        res.locals.currentUser = req.user;
-        next();
-      });
       
     connectDb(url)
     app.use('/api/v1/videos', videoRoutes)
