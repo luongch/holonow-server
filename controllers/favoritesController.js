@@ -4,7 +4,7 @@ const Video = require('../models/video')
 const getFavorites = async (req,res,next) => {
     if(!req.isAuthenticated()) {
         //TODO: send proper error
-        console.log("not authenticated")
+        console.log("favorites controller, you are not authenticated ")
     }
     else {
         let query = {"googleId": req.user.googleId}
@@ -29,7 +29,7 @@ const getFavorites = async (req,res,next) => {
 const addToFavorites = async (req,res,next) => {
     if(!req.isAuthenticated()) {
         //TODO: send proper error
-        console.log("not authenticated")
+        console.log("favorites controller, you are not authenticated to add")
     }
     else {
         console.log("adding to fav")
@@ -57,7 +57,7 @@ const addToFavorites = async (req,res,next) => {
 const removeFromFavorites = async (req,res,next) => {
     if(!req.isAuthenticated()) {
         //TODO: send proper error
-        console.log("not authenticated")
+        console.log("favorites controller, you are not remove")
     }
     else {
         console.log("remove from fav")
