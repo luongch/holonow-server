@@ -40,16 +40,17 @@ You should now be able to call http://localhost:{port}/api/v1/videos and get all
 
 ## Things to do
 - [ ] make use of cache to avoid writing to the db everytime
-- [ ] add table for authors that includes their profile pic
+- [x] add table for authors that includes their profile pic
 - [x] add authentication
-- [ ] add favorites for users
+- [x] add favorites for users
 - [x] add search endpoint
 - [ ] add documentation on how to setup OAuth 2.0 Client IDs
-- [ ] deploy it somewhere
-
+- [x] deploy it somewhere
+- [ ] fix but with shared favorites
+- [ ] pagination videos
+- [ ] create interval to update videos instead of on every /live request
 ## Deployment
-
-
+- Deployed using Render
 
 ## Built With
   - Mongo

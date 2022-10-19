@@ -45,8 +45,6 @@ const addToFavorites = async (req,res,next) => {
             user.favorites.push(req.body.channelId)
             user.save()
         }
-
-        
     }
 
     res.status(200).json({
