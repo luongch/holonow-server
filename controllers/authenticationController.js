@@ -12,6 +12,7 @@ const logout = (req,res,next) => {
 
 const getSession = (req,res,next) => {
     // res.send(req.user)
+    console.log("getting session", req,user)
     res.status(200).send({
         user: req.user
     })
