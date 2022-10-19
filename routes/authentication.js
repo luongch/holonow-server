@@ -8,9 +8,7 @@ const passport = require('passport')
 const dotenv = require('dotenv');
 dotenv.config();
 
-router.get('/login/federated/google', function(req,res,next){
-    next();
-}, passport.authenticate('google', { scope: ['profile'] }));
+router.get('/login/federated/google', passport.authenticate('google', { scope: ['profile'] }));
 router.get('/oauth2/redirect/google',
     passport.authenticate('google', {
         // successRedirect: '/api/v1/favorites/',

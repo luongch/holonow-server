@@ -6,7 +6,6 @@ const channelsRoutes = require('../routes/channels')
 const cors = require('cors')
 const dotenv = require('dotenv');
 dotenv.config();
-const url = process.env.MONGO_URL
 
 var createError = require('http-errors');
 
@@ -15,19 +14,20 @@ var session = require('express-session');
 const passport = require('passport')
 
 const connectDb = require('../helpers/connectDb');
-
-const youtubeHelper = require("../helpers/youtubeHelper")
 const {setupHelper} = require('../helpers/setupHelper')
 
-const createServer = function(mongoDbUri) {
+const createServer = function() {
     
     const app = express();
+    connectDb(process.env.MONGO_URL)
+    
+    app.use(express.json()); //this is needed in order to parse data from req.body
     let corsOptions = {
       origin: !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "http://localhost:3000":"https://holonow.netlify.app",
       credentials: true
     }
     app.use(cors(corsOptions))
-    app.use(express.json()); //this is needed in order to parse data from req.body
+    
     app.set("trust proxy", 1)
 
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -58,7 +58,7 @@ const createServer = function(mongoDbUri) {
     app.use(passport.session());
 
       
-    connectDb(url)
+    
     app.use('/api/v1/videos', videoRoutes)
     app.use('/api/v1/', authRoutes)
     app.use('/api/v1/favorites', favRoutes)

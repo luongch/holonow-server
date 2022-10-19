@@ -19,7 +19,7 @@ passport.use(
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: callbackUrl,
-    }, function verify(request, accessToken, refreshToken, profile, done) {
+    }, function verify(_, __, profile, done) {
         console.log("passport callback function fired")
         let query = {'googleId': profile.id};
         User.findOne(query, async function(err, user){
