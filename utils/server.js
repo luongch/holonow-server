@@ -23,12 +23,13 @@ const createServer = function(mongoDbUri) {
     
     const app = express();
     let corsOptions = {
+      origin: !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "http://localhost:3000":"https://holonow.netlify.app",
       credentials: true
     }
     app.use(cors(corsOptions))
     app.use(express.json()); //this is needed in order to parse data from req.body
     app.set("trust proxy", 1)
-    
+
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
       // dev code
       app.use(session({
