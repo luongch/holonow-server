@@ -18,7 +18,7 @@ passport.use(
     new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: callbackUrl,
+        callbackURL: '/api/v1/oauth2/redirect/google',
     }, function verify(_, __, profile, done) {
         console.log("passport callback function fired")
         let query = {'googleId': profile.id};
