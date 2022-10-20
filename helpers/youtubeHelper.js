@@ -42,7 +42,7 @@ const getVideoInfo = async (videoList) => {
   let chunkedVideoIdList = chunkArray(videoIdList)
   
   let videoInfo = [];
-  
+  console.log("quota used:" , chunkedVideoIdList.length)
   for(const chunkedList of chunkedVideoIdList) {
       let info = await google.youtube('v3').videos.list({
           key: process.env.YOUTUBE_TOKEN,

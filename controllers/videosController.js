@@ -45,55 +45,55 @@ const getUpcomingLivestreams = (req,res, next) => {
  * Update the db with the latest live streaming info for each video
  * @param {*} streamingVideoList
  */
-const writeToDb = (streamingVideoList) => {
-    let startTime = performance.now()
+// const writeToDb = (streamingVideoList) => {
+//     let startTime = performance.now()
 
-    streamingVideoList.forEach(video => {
-        dbHelper.addVideo(video)
-    });
-    let endTime = performance.now()
+//     streamingVideoList.forEach(video => {
+//         dbHelper.addVideo(video)
+//     });
+//     let endTime = performance.now()
 
-    console.log(`Call to write to db took ${endTime - startTime} milliseconds`)
-}
+//     console.log(`Call to write to db took ${endTime - startTime} milliseconds`)
+// }
 
 /**
  * If data is outdated update all livestream data in db
  */
-const refreshLiveStreams = async (req,res,next) => {
-    var startTime = performance.now()
+// const refreshLiveStreams = async (req,res,next) => {
+//     var startTime = performance.now()
 
-    let streamingVideoList = await youtubeHelper.getLiveStreams(refreshAll = false);
+//     let streamingVideoList = await youtubeHelper.getLiveStreams(refreshAll = false);
 
-    let videoCount = await dbHelper.getVideoCount(req,res,next);
-    if(videoCount == 0) { //if it is the first time getting videos
-        writeToDb(streamingVideoList); 
-    }
-    let dateFetched = await dbHelper.getLastDateFetched(req,res,next);
+//     let videoCount = await dbHelper.getVideoCount(req,res,next);
+//     if(videoCount == 0) { //if it is the first time getting videos
+//         writeToDb(streamingVideoList); 
+//     }
+//     let dateFetched = await dbHelper.getLastDateFetched(req,res,next);
     
-    if(!dateFetched && !videoCount) {
-        next(new Error("Couldn't get last dateFetched and videoCount"))
-        return
-    }
-    //when running for the first time we need to check if there is any data otherwise it will not create the collection
+//     if(!dateFetched && !videoCount) {
+//         next(new Error("Couldn't get last dateFetched and videoCount"))
+//         return
+//     }
+//     //when running for the first time we need to check if there is any data otherwise it will not create the collection
     
-    if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 1 || videoCount === 0 ) {
-        writeToDb(streamingVideoList);
-        console.log("outdated")
+//     if(dateFetched && moment().diff(dateFetched.dateFetched, 'minutes') > 1 || videoCount === 0 ) {
+//         writeToDb(streamingVideoList);
+//         console.log("outdated")
         
-    }
-    else {
-        console.log("fresh")
-    }
-    var endTime = performance.now()
+//     }
+//     else {
+//         console.log("fresh")
+//     }
+//     var endTime = performance.now()
 
-    console.log(`Call to refresh livestreams took ${endTime - startTime} milliseconds`)
-}
+//     console.log(`Call to refresh livestreams took ${endTime - startTime} milliseconds`)
+// }
 
 module.exports = {
     getLivestreams,
     getAllVideos,
     getArchivedVideos,
     getUpcomingLivestreams,
-    refreshLiveStreams,
+    // refreshLiveStreams,
     searchVideos
 }

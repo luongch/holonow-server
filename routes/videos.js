@@ -11,10 +11,10 @@ const {
 
 // router.get('/', getAllVideos);
 router.get('/live', 
-    async function(req,res,next) {
-        await refreshLiveStreams(req,res,next)
-        next()
-    },
+    // async function(req,res,next) {
+    //     await refreshLiveStreams(req,res,next)
+    //     next()
+    // },
     function(req,res,next) {
         console.log("getting live streams")
         getLivestreams(req,res,next)
@@ -22,7 +22,7 @@ router.get('/live',
 );
 router.get('/upcoming', getUpcomingLivestreams)
 router.get('/archived', getArchivedVideos);
-router.get('/', refreshLiveStreams)
+// router.get('/', refreshLiveStreams)
 router.get('/search', searchVideos)
 
 module.exports = router;

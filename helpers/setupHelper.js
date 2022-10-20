@@ -14,14 +14,17 @@ const setupHelper = async () => {
     }
     getAllVideos()
 
-    //add code to set up interval to refresh livestreams
+    setInterval(function() {
+        console.log("refreshing videos on interval")
+        getAllVideos(false) 
+    }, 1000*60) //60 seconds
 }
 
 /**
  * Get all past videos and livestreams from XML on server start up
  */
-const getAllVideos = async () => {
-    let streamingVideoList = await youtubeHelper.getLiveStreams(refreshAll = true)
+const getAllVideos = async (refreshAll = true) => {
+    let streamingVideoList = await youtubeHelper.getLiveStreams(refreshAll)
     streamingVideoList.forEach(video => {
         dbHelper.addVideo(video)
     });

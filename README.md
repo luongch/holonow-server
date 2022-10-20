@@ -52,9 +52,9 @@ You should now be able to call http://localhost:{port}/api/v1/videos and get all
 - [x] add search endpoint
 - [x] add documentation on how to setup OAuth 2.0 Client IDs
 - [x] deploy it somewhere
-- [ ] fix bug with shared favorites
+- [x] fix bug with shared favorites
 - [ ] pagination videos
-- [ ] create interval to update videos instead of on every /live request
+- [x] create interval to update videos instead of on every /live request
 ## Deployment
 - Deployed using Render
 
