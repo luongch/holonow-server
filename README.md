@@ -28,7 +28,7 @@ environment running
 8a. On the sidebar go to Credentials > "+ CREATE CREDENTIALS" > "OAuth client ID"
 8b. Set application type to "Web application" and give it a name
 8c. In Authorized redirect URIs add the following 
-http://localhost:3001/api/v1/oauth2/redirect/google, http://localhost:3000/api/v1/oauth2/redirect/google, https://holonowapi.onrender.com/api/v1/oauth2/redirect/google, https://holonow.netlify.app/api/v1/oauth2/redirect/google
+http://localhost:3001/api/v1/oauth2/redirect/google https://holonowapi.onrender.com/api/v1/oauth2/redirect/google
 8d. Press create
 8e. In .env add your GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET
 9. In .env add mongodb uri to MONGO_URL, you can find this by going to mongoDb > connect > Connect your application, it should look something like ('mongodb+srv://{userName}:{password}@{collectionName}.{someString}.mongodb.net/{tableName}?retryWrites=true&w=majority')
