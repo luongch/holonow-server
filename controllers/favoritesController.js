@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const Video = require('../models/video')
+const mongoose = require('mongoose')
 
 const getFavorites = async (req,res,next) => {
     if(!req.isAuthenticated()) {
@@ -7,9 +8,7 @@ const getFavorites = async (req,res,next) => {
         console.log("favorites controller, you are not authenticated ")
     }
     else {
-        let query = {"googleId": req.user.googleId}
-        let user = await User.findOne({query})
-        console.log(user.favorites.toString())
+        let user = await getUser(req);
 
         query =  { $text : { $search : user.favorites.toString() } };
         Video.find(query)
@@ -23,7 +22,6 @@ const getFavorites = async (req,res,next) => {
             }
         )
     }
-    
 }
 
 const addToFavorites = async (req,res,next) => {
@@ -32,9 +30,7 @@ const addToFavorites = async (req,res,next) => {
         console.log("favorites controller, you are not authenticated to add")
     }
     else {
-        console.log("adding to fav")
-        let query = {"googleId": req.user.googleId}
-        let user = await User.findOne({query})
+        let user = await getUser(req);
 
         //check if channelId is already favorited
         if(user.favorites.includes(req.body.channelId)) {
@@ -58,9 +54,7 @@ const removeFromFavorites = async (req,res,next) => {
         console.log("favorites controller, you are not remove")
     }
     else {
-        console.log("remove from fav")
-        let query = {"googleId": req.user.googleId}
-        let user = await User.findOne({query})
+        let user = await getUser(req);
 
         let index = user.favorites.indexOf(req.body.channelId)
         user.favorites.splice(index,1)
@@ -70,6 +64,10 @@ const removeFromFavorites = async (req,res,next) => {
     res.status(200).json({
         data: "successfully removed to faves"
     })
+}
+
+const getUser = async(req) => {
+    return await User.findById(req.user.id)
 }
 
 module.exports = {

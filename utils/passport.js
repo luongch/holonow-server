@@ -46,7 +46,6 @@ passport.use(
 )
 passport.serializeUser(function(user, done) {
     console.log("serializeUser")
-    console.log(user._id)
     return done(null, user._id);
     // process.nextTick(function() {
     //     console.log("in process.nextTick")
@@ -58,7 +57,6 @@ passport.deserializeUser(function(id, done) {
     console.log("deserializeUser", id)
     User.findById(id, (err, doc) => {
         // Whatever we return goes to the client and binds to the req.user property
-        console.log("we found this user", doc)
         return done(null, doc);
     })
     // process.nextTick(function() {

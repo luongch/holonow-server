@@ -19,8 +19,7 @@ const getFavoriteChannels = async (req,res,next) => {
         //or just show the login button in front end
     }
     else {
-        let query = {"googleId": req.user.googleId}
-        let user = await User.findOne({query})
+        let user = await User.findById(req.user.id)
         res.status(200).json({data: user.favorites})
     }
 }
