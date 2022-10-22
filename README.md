@@ -55,6 +55,7 @@ You should now be able to call http://localhost:{port}/api/v1/videos and get all
 - [x] fix bug with shared favorites
 - [ ] pagination videos
 - [x] create interval to update videos instead of on every /live request
+- [ ] use cache for channel profile pics so the channels endpoint doesn't need to be called everytime
 ## Deployment
 - Deployed using Render
 

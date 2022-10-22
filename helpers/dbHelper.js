@@ -54,16 +54,23 @@ module.exports = class DbHelper {
             res.status(200).json({data:results})
         })
     }
-    search(req,res,next, searchTerms) {
+    async search(req,res,next, searchTerms) {
         let query =  { $text : { $search : searchTerms } };
-        Video.find(query)
-        .sort({'scheduledStartTime':-1})
-        .exec(function (err, results) {
-            if (err) {
-                console.log("error in results")
-                next(err)
-            } 
-            res.status(200).json({data: results})
+
+        let count = await Video.find(query)
+        .countDocuments()
+        
+        let perPage = 15;
+        let page = req.query.page ? req.query.page : 0;
+
+        let results = await Video.find(query)
+        .limit(perPage)
+        .skip(perPage * page)
+        .sort({'scheduledStartTime':-1})        
+
+        res.status(200).json({
+            data: results,
+            count
         })
     }
     addVideo(videoData) {
@@ -87,15 +94,22 @@ module.exports = class DbHelper {
             res.status(200).json({data: liveStreams})
         })
     }
-    getArchivedVideos(req,res,next) {
+    async getArchivedVideos(req,res,next) {
         let query = {'concurrentViewers': {$eq: null}, 'actualStartTime':{$ne: null}};
-        Video.find(query).sort({'actualStartTime':-1})
-        .exec( function (err, archivedVideos) {
-            if(err){
-                next(err)
-                console.error(err);
-            }   
-            res.status(200).json({data: archivedVideos})
+        let count = await Video.find(query)
+        .countDocuments()
+
+        let perPage = 15;
+        let page = req.query.page ? req.query.page : 0
+        console.log("perPage,page", perPage, page)
+        
+        let results = await Video.find(query).sort({'actualStartTime':-1})
+        .limit(perPage)
+        .skip(perPage * page)
+
+        res.status(200).json({
+            data: results,
+            count
         })
     }
     getAllVideos(req,res,next) {
