@@ -10,17 +10,22 @@ const getFavorites = async (req,res,next) => {
     else {
         let user = await getUser(req);
 
-        query =  { $text : { $search : user.favorites.toString() } };
-        Video.find(query)
+        let query =  { $text : { $search : user.favorites.toString() } };
+
+        let count = await Video.find(query)
+        .countDocuments()
+
+        let perPage = 15;
+        let page = req.query.page ? req.query.page : 0;
+        let results = await Video.find(query)
+            .limit(perPage)
+            .skip(perPage * page)
             .sort({'scheduledStartTime':-1})
-            .exec(function (err, results) {
-                if (err) {
-                    console.log("error in results")
-                    next(err)
-                } 
-                res.status(200).json({data: results})
-            }
-        )
+            
+        res.status(200).json({
+            data: results,
+            count
+        })
     }
 }
 
