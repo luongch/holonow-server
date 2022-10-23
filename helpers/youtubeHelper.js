@@ -53,7 +53,6 @@ const getVideoInfo = async (videoList) => {
       videoInfo.push.apply(videoInfo, info.data.items);
   }
   let endTime = performance.now()
-
   console.log(`Call to youtube API took ${endTime - startTime} milliseconds`)
   return videoInfo;
 };
@@ -158,7 +157,7 @@ const getLiveStreams = async(refreshAll = true) => {
       //&& !existsInCache(videosInfo[i].id)
       if (liveStreamingDetails ) {
           streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails, ...thumbnailDetails})
-          addToCache(videosInfo[i])
+          // addToCache(videosInfo[i])
       }
   }
 

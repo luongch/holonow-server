@@ -56,6 +56,8 @@ You should now be able to call http://localhost:{port}/api/v1/videos and get all
 - [ ] pagination videos
 - [x] create interval to update videos instead of on every /live request
 - [ ] use cache for channel profile pics so the channels endpoint doesn't need to be called everytime
+- [x] add pagination
+
 ## Deployment
 - Deployed using Render
 

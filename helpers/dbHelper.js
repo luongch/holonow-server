@@ -1,5 +1,6 @@
 const Video = require('../models/video')
 const Channel = require('../models/channel')
+const { addToCache } = require('../utils/cache');
 
 const extractVideoData = (videoData) => {
     let video = new Video({
@@ -34,12 +35,13 @@ module.exports = class DbHelper {
     }
     getChannel(req,res,next) {
         let query = {'id':req.params.id}
-        Channel.find(query)
+        Channel.findOne(query)
         .exec(function(err, results) {
             if(err) {
                 console.log("err getting channel")
                 next(err)
             }
+            addToCache(results)
             res.status(200).json({data:results})
         })
     }
