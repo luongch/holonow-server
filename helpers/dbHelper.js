@@ -10,6 +10,7 @@ const extractVideoData = (videoData) => {
         author: videoData.author,
         scheduledStartTime: videoData.scheduledStartTime ? videoData.scheduledStartTime : null,
         actualStartTime: videoData.actualStartTime ? videoData.actualStartTime : null,
+        liveBroadcastContent: videoData.liveBroadcastContent,
         concurrentViewers: videoData.concurrentViewers ? videoData.concurrentViewers : null,
         activeLiveChatId: videoData.activeLiveChatId ? videoData.activeLiveChatId : null,
         thumbnails: videoData.thumbnails
@@ -86,7 +87,7 @@ module.exports = class DbHelper {
         });
     }
     getLivestreams(req,res,next) {
-        let query = {'concurrentViewers': {$ne: null}}; 
+        let query = {'liveBroadcastContent': 'live'}; 
         Video.find(query)
         .exec(function (err, liveStreams) {
             if (err) {
@@ -97,7 +98,8 @@ module.exports = class DbHelper {
         })
     }
     async getArchivedVideos(req,res,next) {
-        let query = {'concurrentViewers': {$eq: null}, 'actualStartTime':{$ne: null}};
+        // let query = {'concurrentViewers': {$eq: null}, 'actualStartTime':{$ne: null}};
+        let query = {'liveBroadcastContent':'none'}
         let count = await Video.find(query)
         .countDocuments()
 
@@ -126,7 +128,8 @@ module.exports = class DbHelper {
     }
     getUpcomingLiveStreams(req,res) {
         let currentDate = new Date().toISOString();
-        let query = {'scheduledStartTime':{'$gt': currentDate}}
+        // let query = {'scheduledStartTime':{'$gt': currentDate}}
+        let query = {'liveBroadcastContent':'upcoming'}
         Video.find(query).sort({'scheduledStartTime':1})
         .exec(function (err, upcomingVideos) {
             if (err) {

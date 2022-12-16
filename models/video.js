@@ -34,6 +34,10 @@ const videoSchema = new mongoose.Schema({
         type: Date,
         required:[true, 'must provide stream start time']
     },
+    liveBroadcastContent: {
+        type: String,
+        required:[true, 'must provide liveBroadcastContent type']
+    },
     concurrentViewers: {
         type: Number,
         // required:[true, 'must provide concurrent viewers']

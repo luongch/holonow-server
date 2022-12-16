@@ -148,15 +148,17 @@ const getLiveStreams = async(refreshAll = true) => {
   let videoList = await getVideoList(refreshAll);
   let videosInfo = await getVideoInfo(videoList);
   let streamingVideoList = [];
+  let liveBroadcastContent = null;
   //loop through all the videosInfo and combine it into a new object
   for(let i = videosInfo.length-1; i >= 0; i--) {
       let liveStreamingDetails = videosInfo[i].liveStreamingDetails
+      liveBroadcastContent = videosInfo[i].snippet.liveBroadcastContent
       let thumbnailDetails = {
           thumbnails: videosInfo[i].snippet.thumbnails
       };
       //&& !existsInCache(videosInfo[i].id)
       if (liveStreamingDetails ) {
-          streamingVideoList.push({ ...videoList[i], ...liveStreamingDetails, ...thumbnailDetails})
+          streamingVideoList.push({ ...videoList[i], liveBroadcastContent, ...liveStreamingDetails, ...thumbnailDetails})
           // addToCache(videosInfo[i])
       }
   }
