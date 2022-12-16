@@ -103,7 +103,6 @@ module.exports = class DbHelper {
 
         let perPage = 15;
         let page = req.query.page ? req.query.page : 0
-        console.log("perPage,page", perPage, page)
         
         let results = await Video.find(query).sort({'actualStartTime':-1})
         .limit(perPage)

@@ -13,7 +13,6 @@ const getChannels = (req,res,next) => {
 const getChannel = (req,res,next) => {
     if(existsInCache(req.params.id)) {
         let results = cache.get(req.params.id)
-        console.log("it exists in the cache", results)
         res.status(200).json({data:results})
     }
     else {

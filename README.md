@@ -45,7 +45,6 @@ You should now be able to call http://localhost:{port}/api/v1/videos and get all
     - this doesn't always update right away so some livestreams appear as live when they have already ended 
 
 ## Things to do
-- [ ] make use of cache to avoid writing to the db everytime
 - [x] add table for authors that includes their profile pic
 - [x] add authentication
 - [x] add favorites for users
@@ -53,9 +52,9 @@ You should now be able to call http://localhost:{port}/api/v1/videos and get all
 - [x] add documentation on how to setup OAuth 2.0 Client IDs
 - [x] deploy it somewhere
 - [x] fix bug with shared favorites
-- [ ] pagination videos
+- [x] pagination videos
 - [x] create interval to update videos instead of on every /live request
-- [ ] use cache for channel profile pics so the channels endpoint doesn't need to be called everytime
+- [x] use cache for channel profile pics so the channels endpoint doesn't need to be called everytime
 - [x] add pagination
 
 ## Deployment

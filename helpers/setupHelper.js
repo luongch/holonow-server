@@ -34,7 +34,7 @@ const refreshChannels = async () => {
     let channelInfo = await getChannelInfo();
     
     channelInfo.forEach(channel => {
-        console.log(channel.snippet.thumbnails)
+        // console.log(channel.snippet.thumbnails)
         let data = {
             id: channel.id,
             title: channel.snippet.title,
