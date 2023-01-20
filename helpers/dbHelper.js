@@ -87,7 +87,10 @@ module.exports = class DbHelper {
         });
     }
     getLivestreams(req,res,next) {
-        let query = {'liveBroadcastContent': 'live'}; 
+        //only show livestreams from the past 24hours
+        let currentDate = new Date()
+        currentDate.setDate(currentDate.getDate()-1)
+        let query = {'liveBroadcastContent': 'live', 'concurrentViewers': {$ne: null}, 'actualStartTime': {'$gt':currentDate.toISOString()}  }; 
         Video.find(query)
         .exec(function (err, liveStreams) {
             if (err) {
