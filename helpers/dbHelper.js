@@ -131,8 +131,8 @@ module.exports = class DbHelper {
     }
     getUpcomingLiveStreams(req,res) {
         let currentDate = new Date().toISOString();
-        // let query = {'scheduledStartTime':{'$gt': currentDate}}
-        let query = {'liveBroadcastContent':'upcoming'}
+        //need to look at scheduledStart time, just checking if upcoming leads to bugs
+        let query = {'scheduledStartTime':{'$gt': currentDate}, 'liveBroadcastContent':'upcoming'}
         Video.find(query).sort({'scheduledStartTime':1})
         .exec(function (err, upcomingVideos) {
             if (err) {
